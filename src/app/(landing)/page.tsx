@@ -10,6 +10,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Icons } from "@/components/icons";
 import Footer from "@/components/footer";
+import LightPillar from "@/components/light-pillar";
 
 export default async function Home() {
   const codeSnippet = `await fetch("http://localhost:3000/api/v1/events", {
@@ -29,12 +30,27 @@ export default async function Home() {
 
   return (
     <>
-      <section className="relative py-24 sm:py-32 bg-brand-25 dark:bg-dark-background">
-        <MaxWidthWrapper className="text-center">
+      <section className="relative py-24 sm:py-32 bg-brand-25 dark:bg-dark-background overflow-hidden">
+        <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
+          <LightPillar
+            topColor="#5227FF"
+            bottomColor="#FF9FFC"
+            intensity={1.0}
+            rotationSpeed={0.3}
+            glowAmount={0.005}
+            pillarWidth={3.0}
+            pillarHeight={0.4}
+            noiseIntensity={0.5}
+            pillarRotation={0}
+            interactive={false}
+            mixBlendMode="normal"
+          />
+        </div>
+        <MaxWidthWrapper className="text-center relative z-10">
           <div className="relative mx-auto text-center flex flex-col items-center gap-10">
             <div>
               <Heading>
-                <span>Real-Time SaaS Insights,</span>
+                <span className="text-white drop-shadow-lg">Real-Time SaaS Insights,</span>
                 <br />
                 <span
                   className="relative bg-gradient-to-r from-brand-700 to-brand-800 text-transparent bg-clip-text dark:bg-gradient-to-r dark:from-brand-600 dark:to-brand-700"
@@ -43,16 +59,16 @@ export default async function Home() {
                 </span>
               </Heading>
             </div>
-            <p className="text-base/7 text-gray-600 max-w-prose text-center text-pretty dark:text-zinc-400">PingFlow is the easiest way to monitor your SaaS. Get instance notifications for{" "}
-              <span className="font-semibold text-gray-700 dark:text-zinc-300">sales, new users, or any other event{" "}
+            <p className="text-base/7 text-white max-w-prose text-center text-pretty drop-shadow-md">PingFlow is the easiest way to monitor your SaaS. Get instance notifications for{" "}
+              <span className="font-semibold text-white">sales, new users, or any other event{" "}
               </span>sent directly to your discord
             </p>
-            <ul className="space-y-2 text-base/7 text-gray-600 text-left flex flex-col items-start dark:text-zinc-400">
+            <ul className="space-y-2 text-base/7 text-white text-left flex flex-col items-start drop-shadow-md">
               {[
                 "Real-time Discord alert for critical events", "Buy once, use forever", "Track sales, new users, or any other event"
               ].map((item, index) => (
                 <li key={index} className="flex gap-1.5 items-center text-left">
-                  <Check className="size-5 shrink-0 text-brand-700 dark:text-brand-600" />
+                  <Check className="size-5 shrink-0 text-white" />
                   {item}
                 </li>
               ))}
@@ -60,7 +76,7 @@ export default async function Home() {
             <div className="w-full max-w-80">
               <ShinyButton
                 href="/sign-up"
-                className="relative z-10 h-14 w-full text-base  shadow-lg transition-shadow duration-300 hover:shadow-xl"
+                className="relative z-10 h-14 w-full text-base shadow-lg transition-shadow duration-300 hover:shadow-xl bg-transparent border-2 border-white/50 backdrop-blur-sm hover:bg-white/10"
               >
                 Start for Free Today
               </ShinyButton>
@@ -353,7 +369,7 @@ export default async function Home() {
           </div>
           <ShinyButton
             href="/sign-up"
-            className="relative z-10 h-14 w-full max-w-xs text-base shadow-lg transition-shadow duration-300 hover:shadow-xl"
+            className="relative z-10 h-14 w-full max-w-xs text-base shadow-lg transition-shadow duration-300 hover:shadow-xl bg-transparent border-2 border-white/50 backdrop-blur-sm hover:bg-white/10"
           >
             Start For Free Today
           </ShinyButton>
