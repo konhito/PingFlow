@@ -165,7 +165,10 @@ const LightPillar: React.FC<LightPillarProps> = ({
 
       void main() {
         vec2 fragCoord = vUv * uResolution;
-        vec2 uv = (fragCoord * 2.0 - uResolution) / uResolution.y;
+
+  vec2 uv = fragCoord / uResolution;
+  uv = vec2(1.0 - uv.x, 1.0 - uv.y); // top-right
+  uv = (uv - 0.5) * vec2(uResolution.x / uResolution.y, 1.0);
         
         // Apply 2D rotation to UV coordinates
         float rotAngle = uPillarRotation * PI / 180.0;
