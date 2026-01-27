@@ -1,3 +1,14 @@
+/**
+ * © 2024-2026 PingFlow. All rights reserved.
+ * 
+ * This file is part of PingFlow's proprietary codebase.
+ * Unauthorized copying, modification, distribution, or use of this code,
+ * via any medium, is strictly prohibited without explicit written permission.
+ * 
+ * Proprietary and confidential.
+ * Written by Konhito aka Aditya
+ */
+
 import Features from "@/components/landing/Feature";
 import About from "@/components/landing/About";
 import Pricing from "@/components/landing/Pricing";
@@ -116,6 +127,15 @@ export default function Home() {
           <Testimonial />
           <FAQ />
           <Footer />
+          
+          {/* Copyright Notice */}
+          <div className="py-8 text-center text-xs text-gray-500 border-t border-gray-200 dark:border-gray-800 mt-16">
+            <p>© {new Date().getFullYear()} PingFlow. All rights reserved.</p>
+            <p className="mt-2">
+              This website and its content are protected by copyright law. 
+              Unauthorized reproduction or distribution is prohibited.
+            </p>
+          </div>
         </div>
       </main>
     </>

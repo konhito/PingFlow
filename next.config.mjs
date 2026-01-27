@@ -6,6 +6,8 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Disable source maps in production to prevent easy code inspection
+  productionBrowserSourceMaps: false,
 }
 
 export default nextConfig
