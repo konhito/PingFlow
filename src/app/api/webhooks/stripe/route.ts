@@ -1,12 +1,17 @@
 import { db } from "@/db"
-import { stripe } from "@/lib/stripe"
+import { getStripe } from "@/lib/stripe"
 import { headers } from "next/headers"
 import Stripe from "stripe"
+
+// Make this route dynamic to avoid build-time execution
+export const dynamic = "force-dynamic"
+export const runtime = "nodejs"
 
 export async function POST(req: Request) {
   const body = await req.text()
   const signature = headers().get("stripe-signature")
 
+  const stripe = getStripe()
   const event = stripe.webhooks.constructEvent(
     body,
     signature ?? "",

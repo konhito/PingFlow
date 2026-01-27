@@ -48,8 +48,9 @@ export default function Footer() {
           src="/brand-asset-notification.png"
           width={200}
           height={50}
-          alt="PingFlow"
+          alt="PingFlow logo - Real-time SaaS notification platform"
           className="absolute -top-12 -right-14 size-16 md:-top-16 md:-right-22 md:size-28"
+          aria-hidden="true"
         />
         PingFlow
       </div>
@@ -59,7 +60,7 @@ export default function Footer() {
           src="/mylogo.jpg"
           width={48}
           height={48}
-          alt="Konhito"
+          alt="Konhito aka Aditya - PingFlow Creator"
         />
         <p className="opacity-50 transition-all duration-300 ease-in-out group-hover:opacity-100 font-satoshi">
           Built with ❤️ by{" "}

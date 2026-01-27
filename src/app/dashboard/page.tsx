@@ -9,6 +9,8 @@ import { PlusIcon } from "lucide-react"
 import { createCheckoutSession } from "@/lib/stripe"
 import { PaymentSuccessModal } from "@/components/payment-success"
 
+export const dynamic = "force-dynamic"
+
 interface PageProps {
   searchParams: {
     [key: string]: string | string[] | undefined

@@ -1,8 +1,31 @@
 import Stripe from "stripe"
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
-  apiVersion: "2024-12-18.acacia",
-  typescript: true,
+let stripeInstance: Stripe | null = null
+
+export const getStripe = (): Stripe => {
+  if (!stripeInstance) {
+    const apiKey = process.env.STRIPE_SECRET_KEY
+    
+    if (!apiKey || apiKey === "") {
+      throw new Error(
+        "STRIPE_SECRET_KEY environment variable is required. " +
+        "Please set it in your .env file or environment variables."
+      )
+    }
+    
+    stripeInstance = new Stripe(apiKey, {
+      apiVersion: "2025-02-24.acacia",
+      typescript: true,
+    })
+  }
+  return stripeInstance
+}
+
+// Lazy initialization - only creates instance when accessed
+export const stripe = new Proxy({} as Stripe, {
+  get(_target, prop) {
+    return getStripe()[prop as keyof Stripe]
+  }
 })
 
 export const createCheckoutSession = async ({
@@ -12,7 +35,8 @@ export const createCheckoutSession = async ({
   userEmail: string,
   userId: string
 }) => {
-  const session = await stripe.checkout.sessions.create({
+  const stripeClient = getStripe()
+  const session = await stripeClient.checkout.sessions.create({
     line_items: [
       {
         price: "price_1Qb1kTRsozxOSNhLUBUCa7kg",

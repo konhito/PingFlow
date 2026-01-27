@@ -68,21 +68,14 @@ export default function HeroSection() {
     <div className="w-full">
       <div className="container mx-auto">
         <div className="relative flex flex-col items-center justify-center gap-8 py-0 lg:py-10">
-          <Notification className="absolute top-4 left-4 size-24 md:size-32" />
-          <Wave className="absolute right-10 -bottom-16 size-24 md:bottom-10 md:size-32 lg:bottom-0" />
-          <div>
-            <Button variant="secondary" size="sm" className="gap-4">
-              Get notified instantly{" "}
-              <ArrowRight className="size-4" />
-            </Button>
-          </div>
+          <Notification className="absolute top-4 left-4 size-24 md:size-32" aria-hidden="true" />
+          <Wave className="absolute right-10 -bottom-16 size-24 md:bottom-10 md:size-32 lg:bottom-0" aria-hidden="true" />
           <div className="flex flex-col gap-4">
             <h1 className="font-regular max-w-2xl text-center text-5xl tracking-tighter md:text-7xl">
               <span className="font-excon relative font-black">
-                Your all-in-one notification platform
+                Real-Time Event Monitoring
                 <HandDrawnArrow className="absolute right-2 mx-auto mt-4 size-8 md:-right-8 md:size-12" />
               </span>
-
               <span className="font-ranade relative flex w-full justify-center overflow-hidden text-center md:pt-1 md:pb-4">
                 &nbsp;
                 {titles.map((title, index) => (
@@ -107,11 +100,13 @@ export default function HeroSection() {
                   </motion.div>
                 ))}
               </span>
+              <span className="font-excon relative font-black block mt-2">
+                For Your SaaS
+              </span>
             </h1>
 
             <p className="text-secondary font-satoshi max-w-2xl text-center text-lg leading-relaxed tracking-tight md:text-xl">
-              Managing SaaS events shouldn't be complicated. <br />
-              Get instant notifications for sales, signups, and milestones.
+              Get instant notifications for sales, signups, and milestones delivered to Discord, WhatsApp, or Telegram.
             </p>
           </div>
           <div className="flex flex-row gap-3">
@@ -123,24 +118,24 @@ export default function HeroSection() {
                 Get Started <Bell className="size-4" />
               </Button>
             </Link>
-            <Link href="/dashboard/upgrade">
+            <Link href="/pricing">
               <Button
                 size="lg"
-                className="gap-4 border-2 border-black bg-black text-white shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:bg-white hover:text-black hover:shadow-[2px_2px_0px_0px_#000] dark:border-white/20 dark:bg-white dark:text-black dark:shadow-[4px_4px_0px_0px_#757373] dark:hover:shadow-[2px_2px_0px_0px_#757373]"
+                variant="outline"
+                className="gap-4 border-2 border-black bg-white text-black shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:bg-black hover:text-white hover:shadow-[2px_2px_0px_0px_#000] dark:border-white/20 dark:bg-zinc-900 dark:text-white dark:shadow-[4px_4px_0px_0px_#757373] dark:hover:shadow-[2px_2px_0px_0px_#757373]"
               >
-                Upgrade to Pro{" "}
-                <Star className="size-4" />
+                Learn More <ArrowRight className="size-4" />
               </Button>
             </Link>
           </div>
           <div className="flex flex-row gap-3">
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
-                {testimonials.map((testimonial) => (
+                {testimonials.map((testimonial, index) => (
                   <Image
                     key={testimonial.image}
                     src={testimonial.image}
-                    alt="User testimonial"
+                    alt={`PingFlow user ${index + 1} - Trusted by developers worldwide`}
                     width={32}
                     height={32}
                     className="h-8 w-8 rounded-full border-2 border-white transition-all duration-300 hover:scale-150 hover:cursor-pointer"

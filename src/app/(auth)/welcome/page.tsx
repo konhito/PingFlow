@@ -8,6 +8,9 @@ import { LucideProps } from 'lucide-react'
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
+// This page uses client-side hooks and should be dynamic
+export const dynamic = "force-dynamic"
+
 const Page = () => {
   const router = useRouter()
 

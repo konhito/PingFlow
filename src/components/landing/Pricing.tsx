@@ -110,17 +110,19 @@ export default function Pricing() {
       <div className="relative z-10 container mx-auto">
         <Image
           src="/brand-asset-profile-picture.png"
-          alt="Hero"
+          alt="PingFlow pricing plans - Affordable SaaS notification service"
           width={50}
           height={50}
           className="absolute -top-16 left-0 size-16 md:-top-20 md:size-28"
+          aria-hidden="true"
         />
         <Image
           src="/brand-asset-heart.png"
-          alt="Hero"
+          alt="PingFlow pricing - Choose your plan"
           width={50}
           height={50}
           className="absolute -top-14 right-0 size-16 md:-top-16 md:size-28"
+          aria-hidden="true"
         />
         <div className="mb-16 text-center md:mb-20">
           <h2 className="font-regular font-excon mx-auto mb-6 max-w-4xl text-center text-4xl leading-tight font-black tracking-tighter md:text-5xl lg:text-6xl">

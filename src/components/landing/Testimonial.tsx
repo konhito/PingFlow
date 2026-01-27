@@ -74,7 +74,7 @@ function TestimonialCard({
           <div className="flex items-center gap-3">
             <Image
               src={image}
-              alt={name}
+              alt={`${name} - ${role} - PingFlow customer testimonial`}
               width={48}
               height={48}
               className="h-12 w-12 rounded-md border-4 border-black dark:border-white"

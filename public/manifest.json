@@ -1,0 +1,28 @@
+{
+  "name": "PingFlow - Real-Time SaaS Event Notifications",
+  "short_name": "PingFlow",
+  "description": "Get instant notifications for sales, signups, and milestones delivered to Discord, WhatsApp, and Telegram",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0284c7",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/brand-asset-profile-picture.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/brand-asset-profile-picture.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "lang": "en-US",
+  "dir": "ltr"
+}
+

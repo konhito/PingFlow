@@ -128,8 +128,9 @@ export default function Features() {
               width={50}
               height={50}
               src="/brand-asset-heart.png"
-              alt="PingFlow"
+              alt="PingFlow features - Real-time SaaS notification platform"
               className="absolute -top-16 left-0 size-16 md:-top-20 md:size-28"
+              aria-hidden="true"
             />
           </h2>
           <p className="text-secondary font-satoshi mx-auto max-w-3xl text-center text-lg leading-relaxed tracking-tight md:text-xl">

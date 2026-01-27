@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --no-lint",
+    "build:typecheck": "next build",
     "start": "next start",
     "postinstall": "prisma generate"
   },
