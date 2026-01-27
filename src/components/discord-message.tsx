@@ -46,14 +46,14 @@ export const DiscordMessage = ({
           alt={avatarAlt}
           width={40}
           height={40}
-          className="object-cover rounded-full mr-3"
+          className="object-cover rounded-md border-2 border-black mr-3 dark:border-white/20"
         />
       </div>
 
       <div className="w-full max-w-xl">
         <div className="flex items-center">
-          <p className="font-semibold text-white">{username}</p>
-          <span className="ml-2 px-1.5 py-0.5 text-xs font-semibold bg-brand-600 text-white rounded">
+          <p className="font-semibold text-white font-excon">{username}</p>
+          <span className="ml-2 px-1.5 py-0.5 text-xs font-semibold bg-brand-600 text-white rounded-md border-2 border-black shadow-[2px_2px_0px_0px_#000] font-excon dark:border-white/20 dark:shadow-[2px_2px_0px_0px_#757373]">
             APP
           </span>
           <span className="text-gray-400 ml-1.5 text-xs font-normal">
@@ -61,30 +61,30 @@ export const DiscordMessage = ({
           </span>
         </div>
 
-        <div className="bg-[#2f3136] text-sm w-full rounded p-3 mb-4 mt-1.5">
+        <div className="bg-[#2f3136] text-sm w-full rounded-md border-2 border-black p-3 mb-4 mt-1.5 shadow-[2px_2px_0px_0px_#000] dark:border-white/20 dark:shadow-[2px_2px_0px_0px_#757373]">
           <div className="flex flex-row items-center justify-between mb-2">
             {badgeText ? (
               <span
                 className={cn(
-                  "inline-flex order-2 items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset",
+                  "inline-flex order-2 items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset font-excon",
                   getBadgeStyles(badgeColor)
                 )}
               >
                 {badgeText}
               </span>
             ) : null}
-            <p className="text-white order-1 text-base/7 font-semibold">
+            <p className="text-white order-1 text-base/7 font-semibold font-excon">
               {title}
             </p>
           </div>
 
           {Object.entries(content).map(([key, value]) => (
-            <p key={key} className="text-[#dcddde] text-sm/6">
-              <span className="text-[#b9bbbe]">{key}:</span> {value}
+            <p key={key} className="text-[#dcddde] text-sm/6 font-satoshi">
+              <span className="text-[#b9bbbe] font-excon">{key}:</span> {value}
             </p>
           ))}
 
-          <p className="text-[#72767d] text-xs mt-2 flex items-center">
+          <p className="text-[#72767d] text-xs mt-2 flex items-center font-satoshi">
             <Clock className="size-3 mr-1" />
             {timestamp}
           </p>

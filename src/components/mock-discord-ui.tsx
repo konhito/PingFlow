@@ -5,10 +5,10 @@ import Image from 'next/image'
 
 export const MockDiscordUI = ({ children }: PropsWithChildren) => {
   return (
-    <div className="flex min-h-[800px] w-full max-w-[1200px] bg-discord-background text-white rounded-lg overflow-hidden shadow-xl">
+    <div className="flex min-h-[800px] w-full max-w-[1200px] bg-discord-background text-white rounded-lg overflow-hidden border-4 border-black shadow-[8px_8px_0px_0px_#000] dark:border-white/20 dark:shadow-[8px_8px_0px_0px_#757373]">
       {/* server list */}
-      <div className="hidden sm:flex w-[72px] bg-[#202225] py-3 flex-col items-center">
-        <div className="size-12 bg-discord-brand-color rounded-2xl flex items-center justify-center mb-2 hover:rounded-xl transition-all duration-200">
+      <div className="hidden sm:flex w-[72px] bg-[#202225] py-3 flex-col items-center border-r-2 border-black dark:border-white/20">
+        <div className="size-12 bg-discord-brand-color rounded-md border-2 border-black flex items-center justify-center mb-2 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-200 dark:border-white/20 dark:shadow-[2px_2px_0px_0px_#757373]">
           <Icons.discord className="size-3/5 text-white" />
         </div>
 
@@ -17,7 +17,7 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
         {[...Array(5)].map((_, i) => (
           <div
             key={i}
-            className="size-12 bg-discord-background rounded-3xl flex items-center justify-center mb-3 hover:rounded-xl transition-all duration-200 hover:bg-discord-brand-color cursor-not-allowed"
+            className="size-12 bg-discord-background rounded-md border-2 border-black flex items-center justify-center mb-3 shadow-[2px_2px_0px_0px_#000] transition-all duration-200 cursor-not-allowed dark:border-white/20 dark:shadow-[2px_2px_0px_0px_#757373]"
           >
             <span className="text-lg font-semibold text-gray-400">
               {String.fromCharCode(65 + i)}
@@ -25,15 +25,15 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
           </div>
         ))}
 
-        <div className="group mt-auto size-12 bg-discord-background rounded-3xl flex items-center justify-center mb-3 hover:rounded-xl transition-all duration-200 hover:bg-[#3ba55c] cursor-not-allowed">
+        <div className="group mt-auto size-12 bg-discord-background rounded-md border-2 border-black flex items-center justify-center mb-3 shadow-[2px_2px_0px_0px_#000] transition-all duration-200 cursor-not-allowed dark:border-white/20 dark:shadow-[2px_2px_0px_0px_#757373]">
           <PlusCircle className="text-[#3ba55c] group-hover:text-white" />
         </div>
       </div>
 
       {/* dm list */}
-      <div className="hidden md:flex w-65 bg-[#2f3136] flex-col">
-        <div className="px-4 h-16 border-b border-[#202225] flex items-center shadow-sm">
-          <div className="w-full bg-[#202225] text-sm rounded px-2 h-8 flex items-center justify-center text-gray-500 cursor-not-allowed">
+      <div className="hidden md:flex w-65 bg-[#2f3136] flex-col border-r-2 border-black dark:border-white/20">
+        <div className="px-4 h-16 border-b-2 border-black flex items-center dark:border-white/20">
+          <div className="w-full bg-[#202225] text-sm rounded-md border-2 border-black px-2 h-8 flex items-center justify-center text-gray-500 cursor-not-allowed shadow-[2px_2px_0px_0px_#000] dark:border-white/20 dark:shadow-[2px_2px_0px_0px_#757373]">
             Find or start a conversation
           </div>
         </div>
@@ -56,15 +56,15 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
               Direct Message
             </h3>
 
-            <div className='flex items-center px-2 py-1.5 rounded bg-[#393c43] text-white cursor-pointer'>
+            <div className='flex items-center px-2 py-1.5 rounded-md border-2 border-black bg-[#393c43] text-white cursor-pointer shadow-[2px_2px_0px_0px_#000] dark:border-white/20 dark:shadow-[2px_2px_0px_0px_#757373]'>
               <Image
                 src="/brand-asset-profile-picture.png"
                 alt='PingFlow Avatar'
                 width={32}
                 height={32}
-                className='object-cover rounded-full mr-3'
+                className='object-cover rounded-md border-2 border-black mr-3 dark:border-white/20'
               />
-              <span className='font-medium'>PingFlow</span>
+              <span className='font-medium font-excon'>PingFlow</span>
             </div>
 
             <div className='my-1 space-y-px'>
@@ -81,11 +81,11 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
           </div>
         </div>
 
-        <div className='p-2 bg-[#292b2f] flex items-center'>
-          <div className='size-8 rounded-full bg-brand-700 mr-2' />
+        <div className='p-2 bg-[#292b2f] flex items-center border-t-2 border-black dark:border-white/20'>
+          <div className='size-8 rounded-md border-2 border-black bg-brand-700 mr-2 dark:border-white/20' />
           <div className='flex-1'>
-            <p className='text-sm font-medium text-white'>You</p>
-            <p className='text-xs text-[#b9bbbe] flex items-center'>@your_account</p>
+            <p className='text-sm font-medium text-white font-excon'>You</p>
+            <p className='text-xs text-[#b9bbbe] flex items-center font-satoshi'>@your_account</p>
           </div>
 
           <div className='flex items-center space-x-2'>
@@ -99,7 +99,7 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
       {/* main content */}
       <div className="flex-1 flex flex-col">
         {/* dm header */}
-        <div className="h-16 bg-[#36393f] flex items-center px-4 shadow-sm border-b border-[#202225]">
+        <div className="h-16 bg-[#36393f] flex items-center px-4 border-b-2 border-black dark:border-white/20">
           <div className="md:hidden mr-4">
             <Menu className="size-6 text-[#b9bbbe] hover:text-white cursor-pointer" />
           </div>
@@ -111,12 +111,12 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
                 alt="PingFlow Avatar"
                 width={40}
                 height={40}
-                className="object-cover rounded-full mr-3"
+                className="object-cover rounded-md border-2 border-black mr-3 dark:border-white/20"
               />
-              <div className="absolute bottom-0 right-3 size-3 bg-green-500 rounded-full border-2 border-[#36393f]" />
+              <div className="absolute bottom-0 right-3 size-3 bg-green-500 rounded-md border-2 border-[#36393f]" />
             </div>
 
-            <p className="font-semibold text-white">PingFlow</p>
+            <p className="font-semibold text-white font-excon">PingFlow</p>
           </div>
 
           <div className="ml-auto flex items-center space-x-4 text-[#b9bbbe]">
@@ -137,13 +137,13 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
 
         {/* messgae input */}
         <div className='p-4'>
-          <div className='flex items-center bg-[#40444b] rounded-lg p-1'>
+          <div className='flex items-center bg-[#40444b] rounded-md border-2 border-black p-1 shadow-[2px_2px_0px_0px_#000] dark:border-white/20 dark:shadow-[2px_2px_0px_0px_#757373]'>
             <PlusCircle className='mx-3 text-[#b9bbbe] hover:text-white cursor-not-allowed' />
             <input
               readOnly
               type='text'
               placeholder='Message @PingFlow'
-              className='flex-1 bg-transparent py-2.5 px-1 text-white placeholder-[#72767d] focus: outline-none cursor-not-allowed'
+              className='flex-1 bg-transparent py-2.5 px-1 text-white placeholder-[#72767d] focus:outline-none cursor-not-allowed font-satoshi'
             />
             <div className='flex items-center space-x-3 mx-3 text-[#b9bbbe]'>
               <Gift className='size-5 hover:text-white cursor-not-allowed hidden sm:block' />
