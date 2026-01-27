@@ -306,23 +306,6 @@ curl -X POST https://your-domain.com/api/v1/events \
 3. **Start Receiving Notifications**
    - All events will be sent as Discord DM embeds
 
----
-
-## Pricing
-
-### Free Plan
-- 100 events per month
-- 3 event categories
-- Basic support
-
-### Pro Plan - $49 (One-time payment)
-- 1,000 events per month
-- 10 event categories
-- Priority support
-- Lifetime access
-- All integrations (Discord, WhatsApp, Telegram)
-
-[View Pricing →](https://your-domain.com/pricing)
 
 ---
 
@@ -386,24 +369,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## Acknowledgments
-
-- [Next.js](https://nextjs.org/) for the amazing framework
-- [Prisma](https://www.prisma.io/) for the excellent ORM
-- [Clerk](https://clerk.com/) for authentication
-- [Radix UI](https://www.radix-ui.com/) for accessible components
-
----
-
-## Support
-
-- Email: support@pingflow.com
-- Discord: [Join our Discord](https://discord.gg/pingflow)
-- Documentation: [docs.pingflow.com](https://docs.pingflow.com)
-- Issues: [GitHub Issues](https://github.com/konhito/pingflow/issues)
 
 ---
 
