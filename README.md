@@ -19,7 +19,7 @@
 ---
 
 ## Architecture & Flow
-<img src="./public/Gemini_Generated_Image_w8tofgw8tofgw8to.png" width="300" alt="PingFlow" />
+<img src="./public/Gemini_Generated_Image_w8tofgw8tofgw8to.png" width="800" alt="PingFlow" />
 
 
 
