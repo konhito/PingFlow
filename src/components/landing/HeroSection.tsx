@@ -70,18 +70,18 @@ export default function HeroSection() {
         <div className="relative flex flex-col items-center justify-center gap-8 py-0 lg:py-10">
           <Notification className="absolute top-4 left-4 size-24 md:size-32" aria-hidden="true" />
           <Wave className="absolute right-10 -bottom-16 size-24 md:bottom-10 md:size-32 lg:bottom-0" aria-hidden="true" />
-          <div className="flex flex-col gap-4">
-            <h1 className="font-regular max-w-2xl text-center text-5xl tracking-tighter md:text-7xl">
-              <span className="font-excon relative font-black">
+          <div className="flex flex-col gap-6">
+            <h1 className="font-regular max-w-3xl text-center text-4xl leading-tight tracking-tight md:text-6xl md:leading-tight lg:text-7xl">
+              <span className="font-excon relative font-extrabold block">
                 Real-Time Event Monitoring
                 <HandDrawnArrow className="absolute right-2 mx-auto mt-4 size-8 md:-right-8 md:size-12" />
               </span>
-              <span className="font-ranade relative flex w-full justify-center overflow-hidden text-center md:pt-1 md:pb-4">
+              <span className="font-ranade relative flex w-full justify-center overflow-hidden text-center py-2 md:py-4">
                 &nbsp;
                 {titles.map((title, index) => (
                   <motion.div
                     key={index}
-                    className="absolute font-light"
+                    className="absolute font-light italic"
                     initial={{ opacity: 0, y: "-100" }}
                     transition={{ type: "spring", stiffness: 50 }}
                     animate={
@@ -100,12 +100,12 @@ export default function HeroSection() {
                   </motion.div>
                 ))}
               </span>
-              <span className="font-excon relative font-black block mt-2">
+              <span className="font-excon relative font-extrabold block">
                 For Your SaaS
               </span>
             </h1>
 
-            <p className="text-secondary font-satoshi max-w-2xl text-center text-lg leading-relaxed tracking-tight md:text-xl">
+            <p className="text-muted-foreground font-satoshi max-w-2xl mx-auto text-center text-base leading-relaxed md:text-lg md:leading-relaxed">
               Get instant notifications for sales, signups, and milestones delivered to Discord, WhatsApp, or Telegram.
             </p>
           </div>
