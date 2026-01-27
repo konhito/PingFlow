@@ -374,7 +374,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**Made with love by the PingFlow team**
+**Made with love by konhito**
 
 [Star us on GitHub](https://github.com/konhito/pingflow) • [Follow us on Twitter](https://x.com/otihnok) • [Connect on LinkedIn](https://www.linkedin.com/in/konhito)
 
