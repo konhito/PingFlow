@@ -32,10 +32,10 @@ export const UpgradePageContent = ({ plan }: { plan: Plan }) => {
   return (
     <div className="max-w-3xl flex flex-col gap-8">
       <div>
-        <h1 className="mt-2 text-xl/8 font-medium tracking-tight text-zinc-900">
+        <h1 className="mt-2 text-xl/8 font-medium tracking-tight text-gray-900 dark:text-zinc-300">
           {plan === "PRO" ? "Plan: Pro" : "Plan: Free"}
         </h1>
-        <p className="text-sm/6 text-gray-600 dark:text-zinc-700 max-w-prose">
+        <p className="text-sm/6 text-gray-600 dark:text-zinc-400 max-w-prose">
           {plan === "PRO"
             ? "Thank you for supporting PingFlow. Find your increased usage limits below."
             : "Get access to more events, categories and premium support."}
@@ -43,49 +43,49 @@ export const UpgradePageContent = ({ plan }: { plan: Plan }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="border-2 border-brand-700">
+        <Card className="bg-white dark:bg-[#202225] ring-1 ring-gray-200 dark:ring-gray-600 border-2 border-brand-600 dark:border-brand-500">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <p className="text-sm/6 font-medium dark:text-zinc-700">Total Events</p>
-            <BarChart className="size-4 text-muted-foreground dark:text-zinc-500" />
+            <p className="text-sm/6 font-medium text-gray-900 dark:text-zinc-300">Total Events</p>
+            <BarChart className="size-4 text-brand-600 dark:text-brand-500" />
           </div>
 
           <div>
-            <p className="text-2xl font-bold dark:text-zinc-950">
+            <p className="text-2xl font-bold text-gray-900 dark:text-zinc-300">
               {usageData?.eventsUsed || 0} of{" "}
               {usageData?.eventsLimit.toLocaleString() || 100}
             </p>
-            <p className="text-xs/5 text-muted-foreground dark:text-zinc-500">
+            <p className="text-xs/5 text-gray-600 dark:text-zinc-400">
               Events this period
             </p>
           </div>
         </Card>
-        <Card>
+        <Card className="bg-white dark:bg-[#202225] ring-1 ring-gray-200 dark:ring-gray-600">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <p className="text-sm/6 font-medium dark:text-zinc-700">Event Categories</p>
-            <BarChart className="size-4 text-muted-foreground dark:text-zinc-500" />
+            <p className="text-sm/6 font-medium text-gray-900 dark:text-zinc-300">Event Categories</p>
+            <BarChart className="size-4 text-brand-600 dark:text-brand-500" />
           </div>
 
           <div>
-            <p className="text-2xl font-bold dark:text-zinc-950">
+            <p className="text-2xl font-bold text-gray-900 dark:text-zinc-300">
               {usageData?.categoriesUsed || 0} of{" "}
               {usageData?.categoriesLimit.toLocaleString() || 10}
             </p>
-            <p className="text-xs/5 text-muted-foreground dark:text-zinc-500">Active categories</p>
+            <p className="text-xs/5 text-gray-600 dark:text-zinc-400">Active categories</p>
           </div>
         </Card>
       </div>
 
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-gray-600 dark:text-zinc-400">
         Usage will reset{" "}
         {usageData?.resetDate ? (
           format(usageData.resetDate, "MMM d, yyyy")
         ) : (
-          <span className="animate-pulse w-8 h-4 bg-gray-200"></span>
+          <span className="animate-pulse w-8 h-4 bg-gray-200 dark:bg-gray-700 rounded"></span>
         )}
         {plan !== "PRO" ? (
           <span
             onClick={() => createCheckoutSession()}
-            className="inline cursor-pointer underline text-brand-600"
+            className="inline cursor-pointer underline text-brand-600 dark:text-brand-500 hover:text-brand-700 dark:hover:text-brand-400"
           >
             {" "}
             or upgrade now to increase your limit &rarr;

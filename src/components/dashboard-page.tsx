@@ -23,14 +23,14 @@ export const DashboardPage = ({
   const router = useRouter()
 
   return (
-    <section className="flex-1 h-full w-full flex flex-col dark:bg-zinc-50">
-      <div className="w-full p-6 sm:p-8 flex justify-between border-b border-gray-200">
+    <section className="flex-1 h-full w-full flex flex-col">
+      <div className="w-full p-6 sm:p-8 flex justify-between border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#202225]">
         <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6">
           <div className="flex items-center gap-8">
             {hideBackButton ? null : (
               <Button
                 onClick={() => router.push("/dashboard")}
-                className="w-fit bg-white dark:hover:bg-gray-200 dark:hover:text-black"
+                className="w-fit bg-white hover:bg-gray-50 dark:bg-[#202225] dark:hover:bg-gray-800 dark:text-zinc-300"
                 variant="outline"
               >
                 <ArrowLeft className="size-4 " />
@@ -39,7 +39,7 @@ export const DashboardPage = ({
             {/* <Heading>{title}</Heading> */}
             <h1
               className={cn(
-                "text-4xl  sm:text-5xl text-pretty font-heading font-semibold tracking-tight text-zinc-800 dark:text-zinc-900",
+                "text-4xl  sm:text-5xl text-pretty font-heading font-semibold tracking-tight text-zinc-800 dark:text-zinc-300",
               )}>
               {title}
             </h1>

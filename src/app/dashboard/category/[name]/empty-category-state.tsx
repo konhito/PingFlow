@@ -49,17 +49,17 @@ export const EmptyCategoryState = ({
 
   return (
     <Card
-      contentClassName="max-w-2xl w-full flex flex-col items-center p-6"
+      contentClassName="max-w-2xl w-full flex flex-col items-center p-6 bg-white dark:bg-[#202225] ring-1 ring-gray-200 dark:ring-gray-600"
       className="flex-1 flex items-center justify-center"
     >
-      <h2 className="text-xl/8 font-medium text-center tracking-tight text-gray-950">
+      <h2 className="text-xl/8 font-medium text-center tracking-tight text-gray-900 dark:text-zinc-300">
         Create your first {categoryName} event
       </h2>
-      <p className="text-sm/6 text-gray-600 mb-8 max-w-md text-center text-pretty">
+      <p className="text-sm/6 text-gray-600 dark:text-zinc-400 mb-8 max-w-md text-center text-pretty">
         Get started by sending a request to our tracking API:
       </p>
 
-      <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="w-full max-w-3xl bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden ring-1 ring-gray-200 dark:ring-gray-600">
         <div className="bg-gray-800 px-4 py-2 flex justify-between items-center">
           <div className="flex space-x-2">
             <div className="size-3 rounded-full bg-red-500" />
@@ -88,18 +88,18 @@ export const EmptyCategoryState = ({
       <div className="mt-8 flex flex-col items-center space-x-2">
         <div className="flex gap-2 items-center">
           <div className="size-2 bg-green-500 rounded-full animate-pulse" />
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-gray-600 dark:text-zinc-400">
             Listening to incoming events...
           </span>
         </div>
 
-        <p className="text-sm/6 text-gray-600 mt-2">
+        <p className="text-sm/6 text-gray-600 dark:text-zinc-400 mt-2">
           Need help? Check out our{" "}
-          <a href="#" className="text-blue-600 hover:underline">
+          <a href="/docs" className="text-brand-600 dark:text-brand-500 hover:underline">
             documentation
           </a>{" "}
           or{" "}
-          <a href="#" className="text-blue-600 hover:underline">
+          <a href="/contact" className="text-brand-600 dark:text-brand-500 hover:underline">
             contact support
           </a>
           .

@@ -91,7 +91,7 @@ export const CategoryPageContent = ({
       {
         accessorKey: "category",
         header: "Category",
-        cell: () => <span className="dark:text-zinc-900">{category.name || "Uncategorized"}</span>,
+        cell: () => <span className="text-gray-900 dark:text-zinc-300">{category.name || "Uncategorized"}</span>,
       },
       {
         accessorKey: "createdAt",
@@ -102,7 +102,7 @@ export const CategoryPageContent = ({
               onClick={() =>
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
-              className="dark:text-zinc-700 dark:hover:text-zinc-100 dark:hover:bg-zinc-500"
+              className="text-gray-700 dark:text-zinc-300 hover:text-gray-900 dark:hover:text-zinc-100 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               Date
               <ArrowUpDown className="ml-2 size-4" />
@@ -111,7 +111,7 @@ export const CategoryPageContent = ({
         },
         cell: ({ row }) => {
           return (
-            <span className="dark:text-zinc-900">
+            <span className="text-gray-900 dark:text-zinc-300">
               {new Date(row.getValue("createdAt")).toLocaleString()}
             </span>
           )
@@ -119,15 +119,15 @@ export const CategoryPageContent = ({
       },
       ...(data?.events[0]
         ? Object.keys(data.events[0].fields as object).map((field) => ({
-          accessorFn: (row: Event) =>
-            (row.fields as Record<string, any>)[field],
-          header: field,
-          cell: ({ row }: { row: Row<Event> }) => (
-            <span className="dark:text-zinc-900">
-              {(row.original.fields as Record<string, any>)[field] || "-"}
-            </span >
-          ),
-        }))
+            accessorFn: (row: Event) =>
+              (row.fields as Record<string, any>)[field],
+            header: field,
+            cell: ({ row }: { row: Row<Event> }) => (
+              <span className="text-gray-900 dark:text-zinc-300">
+                {(row.original.fields as Record<string, any>)[field] || "-"}
+              </span >
+            ),
+          }))
         : []),
       {
         accessorKey: "deliveryStatus",
@@ -255,17 +255,17 @@ export const CategoryPageContent = ({
             : sums.thisMonth
 
       return (
-        <Card key={field}>
+        <Card key={field} className="bg-white dark:bg-[#202225] ring-1 ring-gray-200 dark:ring-gray-600">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <p className="text-sm/6 font-medium dark:text-zinc-500">
+            <p className="text-sm/6 font-medium text-gray-900 dark:text-zinc-300">
               {field.charAt(0).toUpperCase() + field.slice(1)}
             </p>
-            <BarChart className="size-4 text-muted-foreground dark:text-zinc-500" />
+            <BarChart className="size-4 text-brand-600 dark:text-brand-500" />
           </div>
 
           <div>
-            <p className="text-2xl font-bold dark:text-zinc-950">{relevantSum.toFixed(2)}</p>
-            <p className="text-xs/5 text-muted-foreground dark:text-zinc-500">
+            <p className="text-2xl font-bold text-gray-900 dark:text-zinc-300">{relevantSum.toFixed(2)}</p>
+            <p className="text-xs/5 text-gray-600 dark:text-zinc-400">
               {activeTab === "today"
                 ? "today"
                 : activeTab === "week"
@@ -290,23 +290,23 @@ export const CategoryPageContent = ({
           setActiveTab(value as "today" | "week" | "month")
         }}
       >
-        <TabsList className="mb-2 dark:bg-zinc-200 dark:text-zinc-700">
-          <TabsTrigger value="today">Today</TabsTrigger>
-          <TabsTrigger value="week">This Week</TabsTrigger>
-          <TabsTrigger value="month">This Month</TabsTrigger>
+        <TabsList className="mb-2 bg-white dark:bg-[#202225]">
+          <TabsTrigger value="today" className="dark:text-zinc-300 dark:data-[state=active]:text-brand-600">Today</TabsTrigger>
+          <TabsTrigger value="week" className="dark:text-zinc-300 dark:data-[state=active]:text-brand-600">This Week</TabsTrigger>
+          <TabsTrigger value="month" className="dark:text-zinc-300 dark:data-[state=active]:text-brand-600">This Month</TabsTrigger>
         </TabsList>
 
         <TabsContent value={activeTab}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
-            <Card className="border-2 border-brand-700">
+            <Card className="bg-white dark:bg-[#202225] ring-1 ring-gray-200 dark:ring-gray-600 border-2 border-brand-600 dark:border-brand-500">
               <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <p className="text-sm/6 font-medium dark:text-zinc-500">Total Events</p>
-                <BarChart className="size-4 text-muted-foreground dark:text-zinc-500" />
+                <p className="text-sm/6 font-medium text-gray-900 dark:text-zinc-300">Total Events</p>
+                <BarChart className="size-4 text-brand-600 dark:text-brand-500" />
               </div>
 
               <div>
-                <p className="text-2xl font-bold dark:text-zinc-950">{data?.eventsCount || 0}</p>
-                <p className="text-xs/5 text-muted-foreground dark:text-zinc-500">
+                <p className="text-2xl font-bold text-gray-900 dark:text-zinc-300">{data?.eventsCount || 0}</p>
+                <p className="text-xs/5 text-gray-600 dark:text-zinc-400">
                   Events{" "}
                   {activeTab === "today"
                     ? "today"
@@ -325,17 +325,17 @@ export const CategoryPageContent = ({
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div className="w-full flex flex-col gap-4">
-            <Heading className="text-3xl dark:text-zinc-900">Event overview</Heading>
+            <Heading className="text-3xl text-gray-900 dark:text-zinc-300">Event overview</Heading>
           </div>
         </div>
 
-        <Card contentClassName="px-6 py-4">
+        <Card contentClassName="px-6 py-4 bg-white dark:bg-[#202225] ring-1 ring-gray-200 dark:ring-gray-600">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="dark:hover:bg-zinc-100 dark:border-zinc-100">
+                <TableRow key={headerGroup.id} className="border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800">
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id} className="dark:text-zinc-700">
+                    <TableHead key={header.id} className="text-gray-900 dark:text-zinc-300">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -353,10 +353,10 @@ export const CategoryPageContent = ({
                 [...Array(5)].map((_, rowIndex) => (
                   <TableRow
                     key={rowIndex}
-                    className="dark:border-zinc-700 dark:hover:bg-zinc-300/50">
+                    className="border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800">
                     {columns.map((_, cellIndex) => (
-                      <TableCell key={cellIndex} className="dark:text-zinc-900">
-                        <div className="h-4 w-full bg-gray-200 text-zinc-950 dark:bg-zinc-100 animate-pulse rounded" />
+                      <TableCell key={cellIndex} className="text-gray-900 dark:text-zinc-300">
+                        <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 animate-pulse rounded" />
                       </TableCell>
                     ))}
                   </TableRow>
@@ -365,12 +365,12 @@ export const CategoryPageContent = ({
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
-                    className="dark:border-zinc-700 dark:hover:bg-gray-100/50"
+                    className="border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
-                        className="dark:text-zinc-300"
+                        className="text-gray-900 dark:text-zinc-300"
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
@@ -381,10 +381,10 @@ export const CategoryPageContent = ({
                   </TableRow>
                 ))
               ) : (
-                <TableRow className="dark:border-zinc-700">
+                <TableRow className="border-gray-200 dark:border-gray-600">
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center dark:bg-zinc-100 dark:text-zinc-900"
+                    className="h-24 text-center text-gray-600 dark:text-zinc-400"
                   >
                     No results.
                   </TableCell>
@@ -401,7 +401,7 @@ export const CategoryPageContent = ({
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage() || isFetching}
-          className="w-fit bg-white dark:hover:bg-gray-200 dark:hover:text-black"
+          className="w-fit bg-white hover:bg-gray-50 dark:bg-[#202225] dark:hover:bg-gray-800 dark:text-zinc-300"
         >
           Previous
         </Button>
@@ -410,7 +410,7 @@ export const CategoryPageContent = ({
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage() || isFetching}
-          className="w-fit bg-white dark:hover:bg-gray-200 dark:hover:text-black"
+          className="w-fit bg-white hover:bg-gray-50 dark:bg-[#202225] dark:hover:bg-gray-800 dark:text-zinc-300"
         >
           Next
         </Button>

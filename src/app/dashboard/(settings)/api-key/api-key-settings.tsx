@@ -17,27 +17,32 @@ export const ApiKeySettings = ({ apiKey }: { apiKey: string }) => {
   }
 
   return (
-    <Card className="max-w-xl w-full">
+    <Card className="max-w-xl w-full bg-white dark:bg-[#202225] ring-1 ring-gray-200 dark:ring-gray-600">
       <div>
-        <Label className="dark:text-zinc-700">Your API Key</Label>
+        <Label className="text-gray-900 dark:text-zinc-300">Your API Key</Label>
         <div className="mt-1 relative">
-          <Input className="dark:text-zinc-950" type="password" value={apiKey} readOnly />
+          <Input 
+            className="bg-white dark:bg-gray-800 text-gray-900 dark:text-zinc-300 border-gray-200 dark:border-gray-600" 
+            type="password" 
+            value={apiKey} 
+            readOnly 
+          />
           <div className="absolute space-x-0.5 inset-y-0 right-0 flex items-center">
             <Button
               variant="outline"
               onClick={copyApiKey}
-              className="p-1 w-10 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:outline-none dark:bg-zinc-50 dark:focus:ring-2 dark:focus:ring-brand-500"
+              className="p-1 w-10 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:focus:outline-none dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-zinc-300 dark:focus:ring-2 dark:focus:ring-brand-500"
             >
               {copySuccess ? (
-                <CheckIcon className="size-4 text-brand-900" />
+                <CheckIcon className="size-4 text-brand-600 dark:text-brand-500" />
               ) : (
-                <ClipboardIcon className="size-4 text-brand-900" />
+                <ClipboardIcon className="size-4 text-brand-600 dark:text-brand-500" />
               )}
             </Button>
           </div>
         </div>
 
-        <p className="mt-2 text-sm/6 text-gray-600">
+        <p className="mt-2 text-sm/6 text-gray-600 dark:text-zinc-400">
           Keep your key secret and do not share it with others.
         </p>
       </div>

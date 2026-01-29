@@ -24,20 +24,20 @@ export const AccountSettings = ({
   })
 
   return (
-    <Card className="max-w-xl w-full space-y-4">
+    <Card className="max-w-xl w-full space-y-4 bg-white dark:bg-[#202225] ring-1 ring-gray-200 dark:ring-gray-600">
       <div className="pt-2">
-        <Label className="dark:text-zinc-900">Discord ID</Label>
+        <Label className="text-gray-900 dark:text-zinc-300">Discord ID</Label>
         <Input
-          className="mt-1 dark:text-zinc-950"
+          className="mt-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-zinc-300 border-gray-200 dark:border-gray-600"
           value={discordId}
           onChange={(e) => setDiscordId(e.target.value)}
           placeholder="Enter your Discord ID"
         />
       </div>
 
-      <p className="mt-2 text-sm/6 text-gray-600">
+      <p className="mt-2 text-sm/6 text-gray-600 dark:text-zinc-400">
         Don't know how to find your Discord ID?{" "}
-        <Link href="#" className="text-brand-600 hover:text-brand-500">
+        <Link href="#" className="text-brand-600 dark:text-brand-500 hover:text-brand-700 dark:hover:text-brand-400">
           Learn how to obtain it here
         </Link>
         .

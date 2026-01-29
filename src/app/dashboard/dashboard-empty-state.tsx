@@ -17,7 +17,7 @@ export const DashboardEmptyState = () => {
   })
 
   return (
-    <Card className="flex flex-col items-center justify-center rounded-2xl flex-1 text-center p-6">
+    <Card className="flex flex-col items-center justify-center rounded-2xl flex-1 text-center p-6 bg-white dark:bg-[#202225] ring-1 ring-gray-200 dark:ring-gray-600">
       <div className="flex justify-center w-full">
         <img
           src="/brand-asset-wave.png"
@@ -26,18 +26,18 @@ export const DashboardEmptyState = () => {
         />
       </div>
 
-      <h1 className="mt-2 text-xl/8 font-medium tracking-tight text-gray-900">
+      <h1 className="mt-2 text-xl/8 font-medium tracking-tight text-gray-900 dark:text-zinc-300">
         No Event Categories Yet
       </h1>
 
-      <p className="text-sm/6 text-gray-600 max-w-prose mt-2 mb-8">
+      <p className="text-sm/6 text-gray-600 dark:text-zinc-400 max-w-prose mt-2 mb-8">
         Start tracking events by creating your first category.
       </p>
 
       <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
         <Button
           variant="outline"
-          className="flex items-center space-x-2 w-full sm:w-auto dark:bg-white dark:text-black dark:hover:bg-zinc-100"
+          className="flex items-center space-x-2 w-full sm:w-auto bg-white hover:bg-gray-50 dark:bg-[#202225] dark:hover:bg-gray-800 dark:text-zinc-300"
           onClick={() => insertQuickstartCategories()}
           disabled={isPending}
         >

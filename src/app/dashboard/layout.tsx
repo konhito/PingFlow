@@ -61,7 +61,7 @@ const Sidebar = ({ onClose }: { onClose?: () => void }) => {
         <ul>
           {SIDEBAR_ITEMS.map(({ category, items }) => (
             <li key={category} className="mb-4 md:mb-8">
-              <p className="text-xs font-medium leading-6 text-zinc-500 dark:text-zinc-400">
+              <p className="text-xs font-medium leading-6 text-gray-500 dark:text-zinc-400">
                 {category}
               </p>
               <div className="-mx-2 flex flex-1 flex-col">
@@ -71,11 +71,11 @@ const Sidebar = ({ onClose }: { onClose?: () => void }) => {
                     href={item.href}
                     className={cn(
                       buttonVariants({ variant: "ghost" }),
-                      "w-full justify-start group flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm font-medium leading-6 text-zinc-700 hover:bg-gray-50 transition dark:text-zinc-300 dark:hover:bg-gray-800"
+                      "w-full justify-start group flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm font-medium leading-6 text-gray-700 hover:bg-gray-50 transition dark:text-zinc-300 dark:hover:bg-gray-800"
                     )}
                     onClick={onClose}
                   >
-                    <item.icon className="size-4 text-zinc-500 group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-zinc-300" />
+                    <item.icon className="size-4 text-gray-500 group-hover:text-gray-700 dark:text-zinc-400 dark:group-hover:text-zinc-300" />
                     {item.text}
                   </Link>
                 ))}
@@ -86,7 +86,7 @@ const Sidebar = ({ onClose }: { onClose?: () => void }) => {
       </div>
 
       <div className="flex flex-col">
-        <hr className="my-4 md:my-6 w-full h-px bg-gray-100 dark:bg-gray-800" />
+        <hr className="my-4 md:my-6 w-full h-px bg-gray-200 dark:bg-gray-700" />
         <UserButton
           showName
           appearance={{
@@ -105,15 +105,15 @@ const Layout = ({ children }: PropsWithChildren) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   return (
-    <div className="relative h-screen flex flex-col md:flex-row bg-white overflow-hidden dark:bg-gray-900">
+    <div className="relative h-screen flex flex-col md:flex-row bg-brand-25 overflow-hidden dark:bg-dark-background font-satoshi">
       {/* sidebar for desktop */}
-      <div className="hidden md:block w-64 lg:w-80 border-r border-gray-100 dark:border-gray-800 p-6 h-full text-brand-900 dark:text-zinc-300 relative z-10">
+      <div className="hidden md:block w-64 lg:w-80 border-r border-gray-200 dark:border-gray-700 p-6 h-full text-brand-900 dark:text-zinc-300 relative z-10 bg-white dark:bg-[#202225]">
         <Sidebar />
       </div>
 
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* mobile header */}
-        <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 dark:bg-gray-900">
+        <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#202225]">
           <Logos />
           <button
             onClick={() => setIsDrawerOpen(true)}
@@ -124,7 +124,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         </div>
 
         {/* main content area */}
-        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-50 shadow-md p-4 md:p-6 relative z-10">
+        <div className="flex-1 overflow-y-auto bg-brand-25 dark:bg-dark-background p-4 md:p-6 relative z-10">
           <div className="relative min-h-full flex flex-col">
             <div className="h-full flex flex-col flex-1 space-y-4">
               {children}
@@ -133,7 +133,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         </div>
 
         <Modal
-          className="p-4 dark:bg-gray-900"
+          className="p-4 dark:bg-[#202225]"
           showModal={isDrawerOpen}
           setShowModal={setIsDrawerOpen}
         >
