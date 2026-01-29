@@ -4,7 +4,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { Modal } from "@/components/ui/model"
 import { cn } from "@/utils"
 import { UserButton } from "@clerk/nextjs"
-import { Gem, Home, Key, type LucideIcon, Menu, Settings } from 'lucide-react'
+import { Gem, Home, Key, type LucideIcon, Menu, Settings, User } from 'lucide-react'
 import Link from "next/link"
 import { PropsWithChildren, useState } from "react"
 
@@ -26,7 +26,10 @@ const SIDEBAR_ITEMS: SidebarCategory[] = [
   },
   {
     category: "Account",
-    items: [{ href: "/dashboard/upgrade", icon: Gem, text: "Upgrade" }],
+    items: [
+      { href: "/dashboard/profile", icon: User, text: "Profile" },
+      { href: "/dashboard/upgrade", icon: Gem, text: "Upgrade" },
+    ],
   },
   {
     category: "Settings",
@@ -71,7 +74,7 @@ const Sidebar = ({ onClose }: { onClose?: () => void }) => {
                     href={item.href}
                     className={cn(
                       buttonVariants({ variant: "ghost" }),
-                      "w-full justify-start group flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm font-medium leading-6 text-gray-700 hover:bg-gray-50 transition dark:text-zinc-300 dark:hover:bg-gray-800"
+                      "w-full justify-start group flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm font-medium leading-6 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition dark:text-zinc-300 dark:hover:bg-gray-800 dark:hover:text-zinc-300"
                     )}
                     onClick={onClose}
                   >

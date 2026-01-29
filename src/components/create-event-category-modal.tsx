@@ -95,39 +95,39 @@ export const CreateEventCategoryModal = ({
       </div>
 
       <Modal
-        className="max-w-xl p-8"
+        className="max-w-xl p-8 bg-white dark:bg-[#202225]"
         showModal={isOpen}
         setShowModal={setIsOpen}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
-            <h2 className="text-lg/7 font-medium tracking-tight text-gray-950">
+            <h2 className="text-lg/7 font-medium tracking-tight text-gray-900 dark:text-zinc-300">
               New Event Category
             </h2>
-            <p className="text-sm/6 text-gray-600">
+            <p className="text-sm/6 text-gray-600 dark:text-zinc-400">
               Create a new category to organize your events.
             </p>
           </div>
 
           <div className="space-y-5">
             <div>
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name" className="text-gray-900 dark:text-zinc-300">Name</Label>
               <Input
                 autoFocus
                 id="name"
                 {...register("name")}
                 placeholder="e.g. user-signup"
-                className="w-full"
+                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-zinc-300 border-gray-200 dark:border-gray-600"
               />
               {errors.name ? (
-                <p className="mt-1 text-sm text-red-500">
+                <p className="mt-1 text-sm text-red-500 dark:text-red-400">
                   {errors.name.message}
                 </p>
               ) : null}
             </div>
 
             <div>
-              <Label>Color</Label>
+              <Label className="text-gray-900 dark:text-zinc-300">Color</Label>
               <div className="flex flex-wrap gap-3">
                 {COLOR_OPTIONS.map((premadeColor) => (
                   <button
@@ -137,7 +137,7 @@ export const CreateEventCategoryModal = ({
                       `bg-[${premadeColor}]`,
                       "size-10 rounded-full ring-2 ring-offset-2 transition-all",
                       color === premadeColor
-                        ? "ring-brand-700 scale-110"
+                        ? "ring-brand-600 dark:ring-brand-500 scale-110"
                         : "ring-transparent hover:scale-105"
                     )}
                     onClick={() => setValue("color", premadeColor)}
@@ -146,14 +146,14 @@ export const CreateEventCategoryModal = ({
               </div>
 
               {errors.color ? (
-                <p className="mt-1 text-sm text-red-500">
+                <p className="mt-1 text-sm text-red-500 dark:text-red-400">
                   {errors.color.message}
                 </p>
               ) : null}
             </div>
 
             <div>
-              <Label>Emoji</Label>
+              <Label className="text-gray-900 dark:text-zinc-300">Emoji</Label>
               <div className="flex flex-wrap gap-3">
                 {EMOJI_OPTIONS.map(({ emoji, label }) => (
                   <button
@@ -162,8 +162,8 @@ export const CreateEventCategoryModal = ({
                     className={cn(
                       "size-10 flex items-center justify-center text-xl rounded-md transition-all",
                       selectedEmoji === emoji
-                        ? "bg-brand-100 ring-2 ring-brand-700 scale-110"
-                        : "bg-brand-100 hover:bg-brand-200"
+                        ? "bg-brand-100 dark:bg-brand-900 ring-2 ring-brand-600 dark:ring-brand-500 scale-110"
+                        : "bg-brand-100 dark:bg-brand-900 hover:bg-brand-200 dark:hover:bg-brand-800"
                     )}
                     onClick={() => setValue("emoji", emoji)}
                   >
@@ -173,18 +173,19 @@ export const CreateEventCategoryModal = ({
               </div>
 
               {errors.emoji ? (
-                <p className="mt-1 text-sm text-red-500">
+                <p className="mt-1 text-sm text-red-500 dark:text-red-400">
                   {errors.emoji.message}
                 </p>
               ) : null}
             </div>
           </div>
 
-          <div className="flex justify-end space-x-3 pt-4 border-t">
+          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-600">
             <Button
               type="button"
               variant="outline"
               onClick={() => setIsOpen(false)}
+              className="bg-white hover:bg-gray-50 dark:bg-[#202225] dark:hover:bg-gray-800 dark:text-zinc-300"
             >
               Cancel
             </Button>

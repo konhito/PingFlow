@@ -2,7 +2,7 @@ import { DashboardPage } from "@/components/dashboard-page"
 import { db } from "@/db"
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
-import { AccountSettings } from "./settings-page-content"
+import { ProfileContent } from "./profile-content"
 
 export const dynamic = "force-dynamic"
 
@@ -22,15 +22,14 @@ const Page = async () => {
   }
 
   return (
-    <DashboardPage title="Account Settings">
-      <AccountSettings 
-        discordId={user.discordId ?? ""}
-        whatsappId={user.whatsappId ?? ""}
-        telegramId={user.telegramId ?? ""}
-        notificationEmail={user.notificationEmail ?? user.email}
+    <DashboardPage title="Profile">
+      <ProfileContent 
+        clerkUser={auth}
+        dbUser={user}
       />
     </DashboardPage>
   )
 }
 
 export default Page
+

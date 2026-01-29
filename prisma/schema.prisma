@@ -17,18 +17,21 @@ enum Plan {
 }
 
 model User {
-  id              String          @id@default(cuid())
-  externalId      String?         @unique
-  quotaLimit      Int    
-  plan            Plan            @default(FREE)
-  email           String          @unique
-  apiKey          String          @unique @default(cuid())
-  discordId       String?    
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  EventCategories EventCategory[]
-  events          Event[]
-  Quota           Quota[]
+  id                String          @id@default(cuid())
+  externalId        String?         @unique
+  quotaLimit        Int    
+  plan              Plan            @default(FREE)
+  email             String          @unique
+  apiKey            String          @unique @default(cuid())
+  discordId         String?    
+  whatsappId        String?
+  telegramId        String?
+  notificationEmail String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  EventCategories   EventCategory[]
+  events            Event[]
+  Quota             Quota[]
 
   @@index([email, apiKey])
 }

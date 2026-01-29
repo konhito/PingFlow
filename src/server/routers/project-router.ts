@@ -51,4 +51,38 @@ export const projectRouter = router({
 
       return c.json({ success: true })
     }),
+
+  updateNotificationSettings: privateProcedure
+    .input(
+      z.object({
+        discordId: z.string().max(20).optional(),
+        whatsappId: z.string().optional(),
+        telegramId: z.string().optional(),
+        notificationEmail: z.string().email().optional(),
+      })
+    )
+    .mutation(async ({ c, ctx, input }) => {
+      const { user } = ctx
+      const updateData: any = {}
+
+      if (input.discordId !== undefined) {
+        updateData.discordId = input.discordId
+      }
+      if (input.whatsappId !== undefined) {
+        updateData.whatsappId = input.whatsappId || null
+      }
+      if (input.telegramId !== undefined) {
+        updateData.telegramId = input.telegramId || null
+      }
+      if (input.notificationEmail !== undefined) {
+        updateData.notificationEmail = input.notificationEmail || null
+      }
+
+      await db.user.update({
+        where: { id: user.id },
+        data: updateData,
+      })
+
+      return c.json({ success: true })
+    }),
 })
