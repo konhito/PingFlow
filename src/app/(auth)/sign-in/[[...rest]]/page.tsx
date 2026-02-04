@@ -1,15 +1,22 @@
 "use client"
 
 import { SignIn } from "@clerk/nextjs"
-import { useAuth, useSearchParams } from "@clerk/nextjs"
+import { useAuth } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 const Page = () => {
   const { isSignedIn } = useAuth()
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const intent = searchParams.get("intent")
+  const [intent, setIntent] = useState<string | null>(null)
+
+  // Read search params from URL on client side
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search)
+      setIntent(params.get("intent"))
+    }
+  }, [])
 
   useEffect(() => {
     if (isSignedIn) {
@@ -24,10 +31,12 @@ const Page = () => {
     return null
   }
 
+  const redirectUrl = intent ? `/dashboard?intent=${intent}` : "/dashboard"
+
   return (
     <div className="w-full flex-1 flex items-center justify-center">
       <SignIn
-        forceRedirectUrl={intent ? `/dashboard?intent=${intent}` : "/dashboard"}
+        forceRedirectUrl={redirectUrl}
         routing="path"
         path="/sign-in"
       />
