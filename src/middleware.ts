@@ -5,8 +5,14 @@ const isProtectedRoute = createRouteMatcher([
 ])
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) {
-    await auth.protect()
+  try {
+    if (isProtectedRoute(req)) {
+      await auth.protect()
+    }
+  } catch (error) {
+    // Log error but don't break the middleware
+    console.error('Middleware error:', error)
+    // Let Clerk handle the redirect
   }
 })
 

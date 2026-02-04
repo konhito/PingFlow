@@ -18,15 +18,27 @@ interface PageProps {
 }
 
 const Page = async ({ searchParams }: PageProps) => {
-  const auth = await currentUser()
+  let auth
+  try {
+    auth = await currentUser()
+  } catch (error) {
+    console.error('Error getting current user:', error)
+    redirect("/sign-in")
+  }
 
   if (!auth) {
     redirect("/sign-in")
   }
 
-  const user = await db.user.findUnique({
-    where: { externalId: auth.id },
-  })
+  let user
+  try {
+    user = await db.user.findUnique({
+      where: { externalId: auth.id },
+    })
+  } catch (error) {
+    console.error('Error fetching user from database:', error)
+    redirect("/sign-in")
+  }
 
   if (!user) {
     return redirect("/welcome")

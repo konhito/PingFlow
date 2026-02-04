@@ -75,7 +75,14 @@ export default function RootLayout({
   }
   
   return (
-    <ClerkProvider publishableKey={clerkPublishableKey}>
+    <ClerkProvider 
+      publishableKey={clerkPublishableKey}
+      appearance={{
+        elements: {
+          rootBox: "mx-auto",
+        },
+      }}
+    >
       {htmlContent}
     </ClerkProvider>
   )
