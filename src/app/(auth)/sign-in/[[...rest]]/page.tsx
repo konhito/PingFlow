@@ -6,9 +6,10 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 const Page = () => {
-  const { isSignedIn } = useAuth()
+  const { isSignedIn, isLoaded } = useAuth()
   const router = useRouter()
   const [intent, setIntent] = useState<string | null>(null)
+  const [isRedirecting, setIsRedirecting] = useState(false)
 
   // Read search params from URL on client side
   useEffect(() => {
@@ -19,16 +20,30 @@ const Page = () => {
   }, [])
 
   useEffect(() => {
-    if (isSignedIn) {
-      // Redirect if already signed in
+    // Only redirect if auth is loaded and user is signed in
+    if (isLoaded && isSignedIn && !isRedirecting) {
+      setIsRedirecting(true)
       const redirectUrl = intent ? `/dashboard?intent=${intent}` : "/dashboard"
-      router.push(redirectUrl)
+      router.replace(redirectUrl) // Use replace instead of push to avoid history issues
     }
-  }, [isSignedIn, intent, router])
+  }, [isLoaded, isSignedIn, intent, router, isRedirecting])
+
+  // Show loading state while auth is loading
+  if (!isLoaded) {
+    return (
+      <div className="w-full flex-1 flex items-center justify-center">
+        <div>Loading...</div>
+      </div>
+    )
+  }
 
   // Don't render SignIn if already signed in (prevents the warning)
-  if (isSignedIn) {
-    return null
+  if (isSignedIn || isRedirecting) {
+    return (
+      <div className="w-full flex-1 flex items-center justify-center">
+        <div>Redirecting...</div>
+      </div>
+    )
   }
 
   const redirectUrl = intent ? `/dashboard?intent=${intent}` : "/dashboard"

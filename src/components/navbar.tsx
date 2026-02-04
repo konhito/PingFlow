@@ -21,6 +21,7 @@ const isClerkAvailable = () => {
 function NavbarWithClerk() {
   const { user, isLoaded } = useUser()
 
+  // Show loading state to prevent flickering
   if (!isLoaded) {
     return (
       <nav className="sticky z-50 h-16 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/80 backdrop-blur-lg transition-all dark:bg-dark-background dark:bg-dark-background/80 dark:backdrop-blur-lg dark:transition-all dark:border-gray-700">

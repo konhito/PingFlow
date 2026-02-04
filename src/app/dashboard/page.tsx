@@ -18,30 +18,20 @@ interface PageProps {
 }
 
 const Page = async ({ searchParams }: PageProps) => {
-  let auth
-  try {
-    auth = await currentUser()
-  } catch (error) {
-    console.error('Error getting current user:', error)
-    redirect("/sign-in")
-  }
+  // Let middleware handle auth protection - just get the user
+  const auth = await currentUser()
 
   if (!auth) {
+    // Middleware should have handled this, but just in case
     redirect("/sign-in")
   }
 
-  let user
-  try {
-    user = await db.user.findUnique({
-      where: { externalId: auth.id },
-    })
-  } catch (error) {
-    console.error('Error fetching user from database:', error)
-    redirect("/sign-in")
-  }
+  const user = await db.user.findUnique({
+    where: { externalId: auth.id },
+  })
 
   if (!user) {
-    return redirect("/welcome")
+    redirect("/welcome")
   }
 
   const intent = searchParams.intent
