@@ -3,8 +3,9 @@ import { Providers } from "@/components/providers"
 import { cn } from "@/utils"
 
 import "./globals.css"
-import { ClerkProvider } from "@clerk/nextjs"
+
 import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from "@/contexts/auth-context"
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_WEBSITE_URL || "https://pingflow.com"),
@@ -44,14 +45,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-  // Check if we have a valid Clerk key (must start with pk_test_ or pk_live_)
-  const hasValidKey = clerkPublishableKey && (
-    clerkPublishableKey.startsWith('pk_test_') || 
-    clerkPublishableKey.startsWith('pk_live_')
-  )
-  
-  const htmlContent = (
+
+  return (
     <html lang="en" className="font-satoshi">
       <body className="min-h-[calc(100vh-1px)] flex flex-col font-satoshi bg-background dark:bg-background text-foreground antialiased">
         <ThemeProvider
@@ -60,30 +55,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="relative flex-1 flex flex-col">
-            <Providers>{children}</Providers>
-          </main>
+          <AuthProvider>
+            <main className="relative flex-1 flex flex-col">
+              <Providers>{children}</Providers>
+            </main>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
-  )
-  
-  // Only wrap with ClerkProvider if we have a valid key
-  // Pages that need Clerk should be marked as dynamic and will have the key at runtime
-  if (!hasValidKey) {
-    return htmlContent
-  }
-  
-  return (
-    <ClerkProvider 
-      publishableKey={clerkPublishableKey}
-      appearance={{
-        elements: {
-          rootBox: "mx-auto",
-        },
-      }}
-    >
-      {htmlContent}
-    </ClerkProvider>
   )
 }

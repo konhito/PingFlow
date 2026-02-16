@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { client } from "@/lib/client"
-import { useUser } from "@clerk/nextjs"
+import { useAuth } from "@/contexts/auth-context"
 import { useMutation } from "@tanstack/react-query"
 import { CheckIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -15,7 +15,7 @@ const INCLUDED_FEATURES = [
 ]
 
 export const PricingContent = () => {
-  const { user } = useUser()
+  const { user } = useAuth()
   const router = useRouter()
 
   const { mutate: createCheckoutSession } = useMutation({

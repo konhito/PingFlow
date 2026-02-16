@@ -1,0 +1,147 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discord-service
+  labels:
+    app: discord-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: discord-service
+  template:
+    metadata:
+      labels:
+        app: discord-service
+    spec:
+      containers:
+      - name: discord-service
+        image: pingflow/discord-service:latest
+        env:
+        - name: KAFKA_BROKER
+          value: "kafka:9092"
+        - name: REDIS_URL
+          value: "redis://redis:6379"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whatsapp-service
+  labels:
+    app: whatsapp-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whatsapp-service
+  template:
+    metadata:
+      labels:
+        app: whatsapp-service
+    spec:
+      containers:
+      - name: whatsapp-service
+        image: pingflow/whatsapp-service:latest
+        env:
+        - name: KAFKA_BROKER
+          value: "kafka:9092"
+        - name: WHATSAPP_API_URL
+          valueFrom:
+            secretKeyRef:
+              name: pingflow-secrets
+              key: whatsapp-api-url
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegram-service
+  labels:
+    app: telegram-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: telegram-service
+  template:
+    metadata:
+      labels:
+        app: telegram-service
+    spec:
+      containers:
+      - name: telegram-service
+        image: pingflow/telegram-service:latest
+        env:
+        - name: KAFKA_BROKER
+          value: "kafka:9092"
+        - name: TELEGRAM_BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: pingflow-secrets
+              key: telegram-bot-token
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-service
+  labels:
+    app: email-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: email-service
+  template:
+    metadata:
+      labels:
+        app: email-service
+    spec:
+      containers:
+      - name: email-service
+        image: pingflow/email-service:latest
+        env:
+        - name: KAFKA_BROKER
+          value: "kafka:9092"
+        - name: SMTP_HOST
+          value: "smtp.gmail.com"
+        - name: SMTP_PORT
+          value: "587"
+        - name: SMTP_USER
+          valueFrom:
+            secretKeyRef:
+              name: pingflow-secrets
+              key: smtp-user
+        - name: SMTP_PASS
+          valueFrom:
+            secretKeyRef:
+              name: pingflow-secrets
+              key: smtp-pass
+        - name: FROM_EMAIL
+          value: "noreply@pingflow.com"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"

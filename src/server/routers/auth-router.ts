@@ -1,5 +1,6 @@
 import { db } from "@/db"
-import { currentUser } from "@clerk/nextjs/server"
+import { verifyJWT } from "@/lib/jwt"
+import { cookies } from "next/headers"
 import { router } from "../__internals/router"
 import { publicProcedure } from "../procedures"
 
@@ -7,26 +8,25 @@ export const dynamic = "force-dynamic"
 
 export const authRouter = router({
   getDatabaseSyncStatus: publicProcedure.query(async ({ c, ctx }) => {
-    const auth = await currentUser()
+    const cookieStore = await cookies()
+    const accessToken = cookieStore.get("accessToken")?.value
 
-    if (!auth) {
+    if (!accessToken) {
+      return c.json({ isSynced: false })
+    }
+
+    const payload = await verifyJWT(accessToken)
+
+    if (!payload) {
       return c.json({ isSynced: false })
     }
 
     const user = await db.user.findFirst({
-      where: { externalId: auth.id },
+      where: { id: payload.userId },
     })
 
-    console.log('USER IN DB:', user);
-
     if (!user) {
-      await db.user.create({
-        data: {
-          quotaLimit: 100,
-          externalId: auth.id,
-          email: auth.emailAddresses[0].emailAddress,
-        },
-      })
+      return c.json({ isSynced: false })
     }
 
     return c.json({ isSynced: true })

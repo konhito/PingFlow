@@ -1,21 +1,12 @@
 import { DashboardPage } from "@/components/dashboard-page"
-import { db } from "@/db"
-import { currentUser } from "@clerk/nextjs/server"
+import { currentUser } from "@/lib/current-user"
 import { redirect } from "next/navigation"
 import { ProfileContent } from "./profile-content"
 
 export const dynamic = "force-dynamic"
 
 const Page = async () => {
-  const auth = await currentUser()
-
-  if (!auth) {
-    redirect("/sign-in")
-  }
-
-  const user = await db.user.findUnique({
-    where: { externalId: auth.id },
-  })
+  const user = await currentUser()
 
   if (!user) {
     redirect("/sign-in")
@@ -23,9 +14,8 @@ const Page = async () => {
 
   return (
     <DashboardPage title="Profile">
-      <ProfileContent 
-        clerkUser={auth}
-        dbUser={user}
+      <ProfileContent
+        user={user}
       />
     </DashboardPage>
   )

@@ -1,6 +1,6 @@
 import { DashboardPage } from "@/components/dashboard-page"
 import { db } from "@/db"
-import { currentUser } from "@clerk/nextjs/server"
+import { currentUser } from "@/lib/current-user"
 import { notFound } from "next/navigation"
 import { CategoryPageContent } from "./category-page-content"
 
@@ -13,17 +13,11 @@ interface PageProps {
 const Page = async ({ params }: PageProps) => {
   if (typeof params.name !== "string") return notFound()
 
-  const auth = await currentUser()
+  const user = await currentUser()
 
-  if (!auth) {
+  if (!user) {
     return notFound()
   }
-
-  const user = await db.user.findUnique({
-    where: { externalId: auth.id },
-  })
-
-  if (!user) return notFound()
 
   const category = await db.eventCategory.findUnique({
     where: {

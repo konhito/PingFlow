@@ -1,7 +1,8 @@
 import { db } from "@/db"
 import { j } from "./__internals/j"
-import { currentUser } from "@clerk/nextjs/server"
+import { verifyJWT } from "@/lib/jwt"
 import { HTTPException } from "hono/http-exception"
+import { cookies } from "next/headers"
 
 const authMiddleware = j.middleware(async ({ c, next }) => {
   const authHeader = c.req.header("Authorization")
@@ -16,14 +17,22 @@ const authMiddleware = j.middleware(async ({ c, next }) => {
     if (user) return next({ user })
   }
 
-  const auth = await currentUser()
+  // Get access token from cookies
+  const cookieStore = await cookies()
+  const accessToken = cookieStore.get("accessToken")?.value
 
-  if (!auth) {
+  if (!accessToken) {
+    throw new HTTPException(401, { message: "Unauthorized" })
+  }
+
+  const payload = await verifyJWT(accessToken)
+
+  if (!payload || !payload.userId) {
     throw new HTTPException(401, { message: "Unauthorized" })
   }
 
   const user = await db.user.findUnique({
-    where: { externalId: auth.id },
+    where: { id: payload.userId },
   })
 
   if (!user) {

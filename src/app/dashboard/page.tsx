@@ -1,6 +1,6 @@
 import { DashboardPage } from "@/components/dashboard-page"
 import { db } from "@/db"
-import { currentUser } from "@clerk/nextjs/server"
+import { currentUser } from "@/lib/current-user"
 import { redirect } from "next/navigation"
 import { DashboardPageContent } from "./dashboard-page-content"
 import { CreateEventCategoryModal } from "@/components/create-event-category-modal"
@@ -19,19 +19,11 @@ interface PageProps {
 
 const Page = async ({ searchParams }: PageProps) => {
   // Let middleware handle auth protection - just get the user
-  const auth = await currentUser()
-
-  if (!auth) {
-    // Middleware should have handled this, but just in case
-    redirect("/sign-in")
-  }
-
-  const user = await db.user.findUnique({
-    where: { externalId: auth.id },
-  })
+  const user = await currentUser()
 
   if (!user) {
-    redirect("/welcome")
+    // Middleware should have handled this, but just in case
+    redirect("/sign-in")
   }
 
   const intent = searchParams.intent

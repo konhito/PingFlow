@@ -3,8 +3,9 @@
 import { buttonVariants } from "@/components/ui/button"
 import { Modal } from "@/components/ui/model"
 import { cn } from "@/utils"
-import { UserButton } from "@clerk/nextjs"
-import { Gem, Home, Key, type LucideIcon, Menu, Settings, User } from 'lucide-react'
+import { useAuth } from "@/contexts/auth-context"
+import { Button } from "@/components/ui/button"
+import { Gem, Home, Key, type LucideIcon, Menu, Settings, User, LogOut } from 'lucide-react'
 import Link from "next/link"
 import { PropsWithChildren, useState } from "react"
 
@@ -43,6 +44,29 @@ const SIDEBAR_ITEMS: SidebarCategory[] = [
     ],
   },
 ]
+
+const SignOutButton = () => {
+  const { signOut, user } = useAuth()
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="bg-brand-100 dark:bg-brand-900 rounded-full h-8 w-8 flex items-center justify-center text-brand-700 dark:text-brand-400 font-medium">
+        {user?.name?.charAt(0) || user?.email?.charAt(0) || "U"}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-gray-900 dark:text-zinc-300 truncate">
+          {user?.name || "User"}
+        </p>
+        <p className="text-xs text-gray-500 dark:text-zinc-400 truncate">
+          {user?.email}
+        </p>
+      </div>
+      <Button variant="ghost" size="icon" onClick={() => signOut()} className="text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200">
+        <LogOut className="h-4 w-4" />
+      </Button>
+    </div>
+  )
+}
 
 const Logos = () => {
   return (
@@ -90,15 +114,7 @@ const Sidebar = ({ onClose }: { onClose?: () => void }) => {
 
       <div className="flex flex-col">
         <hr className="my-4 md:my-6 w-full h-px bg-gray-200 dark:bg-gray-700" />
-        <UserButton
-          showName
-          appearance={{
-            elements: {
-              userButtonBox: "flex-row-reverse dark:text-zinc-300",
-              userButtonOuterIdentifier: "dark:text-zinc-300",
-            },
-          }}
-        />
+        <SignOutButton />
       </div>
     </div>
   )

@@ -1,0 +1,192 @@
+version: '3.8'
+
+services:
+  # ==================== Message Broker ====================
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: pingflow-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - pingflow-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: pingflow-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    networks:
+      - pingflow-network
+
+  # Kafka UI for debugging
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: pingflow-kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    networks:
+      - pingflow-network
+
+  # ==================== Databases ====================
+  postgresql:
+    image: postgres:15-alpine
+    container_name: pingflow-postgres
+    environment:
+      POSTGRES_DB: pingflow
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pingflow-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: pingflow-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - pingflow-network
+
+  # ==================== Microservices ====================
+  # Event Producer Service
+  event-producer:
+    build:
+      context: ./services/event-producer
+      dockerfile: Dockerfile
+    container_name: pingflow-event-producer
+    environment:
+      KAFKA_BROKERS: kafka:9092
+      DATABASE_URL: postgresql://postgres:postgres@postgresql:5432/pingflow
+      NODE_ENV: development
+    depends_on:
+      - kafka
+      - postgresql
+    networks:
+      - pingflow-network
+    restart: unless-stopped
+
+  # Dashboard Service (WebSocket)
+  dashboard-service:
+    build:
+      context: ./services/dashboard-service
+      dockerfile: Dockerfile
+    container_name: pingflow-dashboard-service
+    ports:
+      - "3002:3002"
+    environment:
+      KAFKA_BROKERS: kafka:9092
+      REDIS_URL: redis://redis:6379
+      PORT: 3002
+      NODE_ENV: development
+    depends_on:
+      - kafka
+      - redis
+    networks:
+      - pingflow-network
+    restart: unless-stopped
+
+  # Discord Service
+  discord-service:
+    build:
+      context: ./services/discord-service
+      dockerfile: Dockerfile
+    container_name: pingflow-discord-service
+    environment:
+      KAFKA_BROKERS: kafka:9092
+      REDIS_URL: redis://redis:6379
+      NODE_ENV: development
+    depends_on:
+      - kafka
+      - redis
+    networks:
+      - pingflow-network
+    restart: unless-stopped
+
+  # WhatsApp Service
+  whatsapp-service:
+    build:
+      context: ./services/whatsapp-service
+      dockerfile: Dockerfile
+    container_name: pingflow-whatsapp-service
+    environment:
+      KAFKA_BROKERS: kafka:9092
+      REDIS_URL: redis://redis:6379
+      WHATSAPP_API_URL: ${WHATSAPP_API_URL:-http://localhost:3001}
+      NODE_ENV: development
+    depends_on:
+      - kafka
+      - redis
+    networks:
+      - pingflow-network
+    restart: unless-stopped
+
+  # Telegram Service
+  telegram-service:
+    build:
+      context: ./services/telegram-service
+      dockerfile: Dockerfile
+    container_name: pingflow-telegram-service
+    environment:
+      KAFKA_BROKERS: kafka:9092
+      REDIS_URL: redis://redis:6379
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      NODE_ENV: development
+    depends_on:
+      - kafka
+      - redis
+    networks:
+      - pingflow-network
+    restart: unless-stopped
+
+  # Email Service
+  email-service:
+    build:
+      context: ./services/email-service
+      dockerfile: Dockerfile
+    container_name: pingflow-email-service
+    environment:
+      KAFKA_BROKERS: kafka:9092
+      SMTP_HOST: ${SMTP_HOST:-smtp.gmail.com}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      FROM_EMAIL: ${FROM_EMAIL:-noreply@pingflow.com}
+      NODE_ENV: development
+    depends_on:
+      - kafka
+    networks:
+      - pingflow-network
+    restart: unless-stopped
+
+networks:
+  pingflow-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:

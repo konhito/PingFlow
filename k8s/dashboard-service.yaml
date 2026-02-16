@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard-service
+  labels:
+    app: dashboard-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dashboard-service
+  template:
+    metadata:
+      labels:
+        app: dashboard-service
+    spec:
+      containers:
+      - name: dashboard-service
+        image: pingflow/dashboard-service:latest
+        ports:
+        - containerPort: 3002
+        env:
+        - name: KAFKA_BROKER
+          value: "kafka:9092"
+        - name: REDIS_URL
+          value: "redis://redis:6379"
+        - name: PORT
+          value: "3002"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard-service
+spec:
+  selector:
+    app: dashboard-service
+  ports:
+  - port: 3002
+    targetPort: 3002
+  type: ClusterIP

@@ -16,12 +16,23 @@ enum Plan {
   PRO
 }
 
+enum AuthProvider {
+  GOOGLE
+  GITHUB
+  EMAIL
+}
+
 model User {
-  id                String          @id@default(cuid())
-  externalId        String?         @unique
+  id                String          @id @default(cuid())
+  email             String          @unique
+  name              String?
+  avatar            String?
+  provider          AuthProvider
+  providerId        String
+  password          String?
+  refreshToken      String?
   quotaLimit        Int    
   plan              Plan            @default(FREE)
-  email             String          @unique
   apiKey            String          @unique @default(cuid())
   discordId         String?    
   whatsappId        String?
@@ -33,6 +44,7 @@ model User {
   events            Event[]
   Quota             Quota[]
 
+  @@unique([provider, providerId])
   @@index([email, apiKey])
 }
 
