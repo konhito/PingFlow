@@ -278,6 +278,46 @@ importers:
         specifier: ^5.0.0
         version: 5.7.2
 
+  services/email-service:
+    dependencies:
+      '@pingflow/kafka-client':
+        specifier: file:../../packages/kafka-client
+        version: link:../../packages/kafka-client
+      '@pingflow/logger':
+        specifier: file:../../packages/logger
+        version: link:../../packages/logger
+      '@pingflow/shared-types':
+        specifier: file:../../packages/shared-types
+        version: link:../../packages/shared-types
+      axios:
+        specifier: ^1.6.0
+        version: 1.13.5
+      bull:
+        specifier: ^4.12.0
+        version: 4.16.5
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.6.1
+      nodemailer:
+        specifier: ^8.0.1
+        version: 8.0.1
+    devDependencies:
+      '@types/bull':
+        specifier: ^4.10.0
+        version: 4.10.4
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.17.10
+      '@types/nodemailer':
+        specifier: ^7.0.10
+        version: 7.0.10
+      tsx:
+        specifier: ^4.7.0
+        version: 4.21.0
+      typescript:
+        specifier: ^5.0.0
+        version: 5.7.2
+
   services/event-producer:
     dependencies:
       '@pingflow/kafka-client':
@@ -1464,6 +1504,9 @@ packages:
 
   '@types/node@20.17.10':
     resolution: {integrity: sha512-/jrvh5h6NXhEauFFexRin69nA0uHJ5gwk4iDivp/DeoEua3uwCUto6PC86IpRITBOs4+6i2I56K5x5b6WYGXHA==}
+
+  '@types/nodemailer@7.0.10':
+    resolution: {integrity: sha512-tP+9WggTFN22Zxh0XFyst7239H0qwiRCogsk7v9aQS79sYAJY+WEbTHbNYcxUMaalHKmsNpxmoTe35hBEMMd6g==}
 
   '@types/pg@8.11.6':
     resolution: {integrity: sha512-/2WmmBXHLsfRqzfHW7BNZ8SbYzE8OSk7i3WjFYvfgRHj7S1xj+16Je5fUKv3lVdVzk/zn9TXOqf+avFCFIE0yQ==}
@@ -2888,6 +2931,10 @@ packages:
   node-gyp-build-optional-packages@5.2.2:
     resolution: {integrity: sha512-s+w+rBWnpTMwSFbaE0UXsRlg7hU4FjekKU4eyAih5T8nJuNZT1nNsskXpxmeqSK9UzkBl6UgRlnKc8hz8IEqOw==}
     hasBin: true
+
+  nodemailer@8.0.1:
+    resolution: {integrity: sha512-5kcldIXmaEjZcHR6F28IKGSgpmZHaF1IXLWFTG+Xh3S+Cce4MiakLtWY+PlBU69fLbRa8HlaGIrC/QolUpHkhg==}
+    engines: {node: '>=6.0.0'}
 
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
@@ -4701,6 +4748,10 @@ snapshots:
     dependencies:
       undici-types: 6.19.8
 
+  '@types/nodemailer@7.0.10':
+    dependencies:
+      '@types/node': 20.17.10
+
   '@types/pg@8.11.6':
     dependencies:
       '@types/node': 20.17.10
@@ -6367,6 +6418,8 @@ snapshots:
     dependencies:
       detect-libc: 2.1.2
     optional: true
+
+  nodemailer@8.0.1: {}
 
   normalize-path@3.0.0: {}
 
