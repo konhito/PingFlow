@@ -54,12 +54,12 @@ PingFlow uses an event-driven microservices architecture powered by Apache Kafka
 
 ```mermaid
 graph LR
-    Client[Client App] -->|POST /events| Gateway[API Gateway (Next.js)]
-    Gateway -->|Produces| Topic1[Kafka: events.incoming]
+    Client[Client App] -->|POST /events| Gateway["API Gateway (Next.js)"]
+    Gateway -->|Produces| Topic1["Kafka: events.incoming"]
     
     Topic1 -->|Consumes| Producer[Event Producer Service]
     Producer -->|Validates & Stores| DB[(PostgreSQL)]
-    Producer -->|Routes| Topic2[Kafka: notifications.*]
+    Producer -->|Routes| Topic2["Kafka: notifications.*"]
     
     Topic2 -->|Consumes| Discord[Discord Service]
     Topic2 -->|Consumes| WhatsApp[WhatsApp Service]
@@ -69,7 +69,7 @@ graph LR
     WhatsApp -->|Sends| WhatsAppAPI[WhatsApp API]
     Telegram -->|Sends| TelegramAPI[Telegram API]
     
-    Producer -->|Updates| Topic3[Kafka: events.processed]
+    Producer -->|Updates| Topic3["Kafka: events.processed"]
     Topic3 -->|Consumes| Dashboard[Dashboard Service]
     Dashboard -->|WebSocket| Browser[User Dashboard]
 ```
