@@ -4,6 +4,8 @@ import { generateTokens } from '@/lib/jwt'
 import { db } from '@/db'
 import { cookies } from 'next/headers'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
     try {
         const searchParams = request.nextUrl.searchParams
