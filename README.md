@@ -48,6 +48,12 @@ Now re-engineered with a **Microservices Architecture** for high scalability and
 
 ---
 
+<div align="center">
+
+<img src="public/image.png" width="500" alt="PingFlow" />
+
+</div>
+
 ## Architecture
 
 PingFlow uses an event-driven microservices architecture powered by Apache Kafka.
@@ -56,19 +62,19 @@ PingFlow uses an event-driven microservices architecture powered by Apache Kafka
 graph LR
     Client[Client App] -->|POST /events| Gateway["API Gateway (Next.js)"]
     Gateway -->|Produces| Topic1["Kafka: events.incoming"]
-    
+
     Topic1 -->|Consumes| Producer[Event Producer Service]
     Producer -->|Validates & Stores| DB[(PostgreSQL)]
     Producer -->|Routes| Topic2["Kafka: notifications.*"]
-    
+
     Topic2 -->|Consumes| Discord[Discord Service]
     Topic2 -->|Consumes| WhatsApp[WhatsApp Service]
     Topic2 -->|Consumes| Telegram[Telegram Service]
-    
+
     Discord -->|Sends| DiscordAPI[Discord API]
     WhatsApp -->|Sends| WhatsAppAPI[WhatsApp API]
     Telegram -->|Sends| TelegramAPI[Telegram API]
-    
+
     Producer -->|Updates| Topic3["Kafka: events.processed"]
     Topic3 -->|Consumes| Dashboard[Dashboard Service]
     Dashboard -->|WebSocket| Browser[User Dashboard]
@@ -76,15 +82,15 @@ graph LR
 
 ### Services Overview
 
-| Service | Description | Tech Stack |
-|---------|-------------|------------|
-| **API Gateway** | Entry point, Authentication, Rate Limiting | Next.js, Hono |
-| **Event Producer** | Core logic, validation, routing | Node.js, KafkaJS, Prisma |
-| **Discord Service** | Handles Discord notifications | Node.js, discord.js |
-| **WhatsApp Service** | Handles WhatsApp notifications | Node.js, whatscli |
-| **Telegram Service** | Handles Telegram notifications | Node.js, telegraf |
-| **Email Service** | Handles Email notifications | Node.js, Nodemailer |
-| **Dashboard Service** | Real-time updates via WebSockets | Node.js, Socket.io |
+| Service               | Description                                | Tech Stack               |
+| --------------------- | ------------------------------------------ | ------------------------ |
+| **API Gateway**       | Entry point, Authentication, Rate Limiting | Next.js, Hono            |
+| **Event Producer**    | Core logic, validation, routing            | Node.js, KafkaJS, Prisma |
+| **Discord Service**   | Handles Discord notifications              | Node.js, discord.js      |
+| **WhatsApp Service**  | Handles WhatsApp notifications             | Node.js, whatscli        |
+| **Telegram Service**  | Handles Telegram notifications             | Node.js, telegraf        |
+| **Email Service**     | Handles Email notifications                | Node.js, Nodemailer      |
+| **Dashboard Service** | Real-time updates via WebSockets           | Node.js, Socket.io       |
 
 ---
 
@@ -140,28 +146,33 @@ pingflow/
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/konhito/pingflow
    cd pingflow
    ```
 
 2. **Setup Environment**
+
    ```bash
    cp .env.example .env
    # Update .env with your credentials (DB, OAuth, etc.)
    ```
 
 3. **Install Dependencies**
+
    ```bash
    pnpm install
    ```
 
 4. **Start Infrastructure (Kafka, Zookeeper, Redis)**
+
    ```bash
    docker-compose up -d
    ```
 
 5. **Run Database Migrations**
+
    ```bash
    pnpm prisma migrate dev
    ```
@@ -191,11 +202,12 @@ Authorization: Bearer ping_123456789
 Send a new event notification.
 
 **Body:**
+
 ```json
 {
   "category": "sale",
   "fields": {
-    "amount": 99.00,
+    "amount": 99.0,
     "plan": "PRO",
     "email": "user@example.com"
   }
@@ -203,6 +215,7 @@ Send a new event notification.
 ```
 
 **Response:**
+
 ```json
 { "success": true, "eventId": "evt_clx123..." }
 ```
@@ -212,16 +225,19 @@ Send a new event notification.
 ## Integrations
 
 ### Discord
+
 1. Add the PingFlow bot to your server.
 2. In Dashboard, provide your **User ID** or **Channel ID**.
 3. Events will be sent as rich embeds.
 
 ### WhatsApp
+
 1. Connect your number via the Dashboard.
 2. Verify ownership.
 3. Receive instant messages.
 
 ### Telegram
+
 1. Start a chat with the PingFlow bot.
 2. Send `/start` to link your account.
 3. Receive formatted event logs.
