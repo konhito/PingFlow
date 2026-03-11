@@ -76,7 +76,7 @@ services:
   # Event Producer Service
   event-producer:
     build:
-      context: ./services/event-producer
+      context: ../services/event-producer
       dockerfile: Dockerfile
     container_name: pingflow-event-producer
     environment:
@@ -93,7 +93,7 @@ services:
   # Dashboard Service (WebSocket)
   dashboard-service:
     build:
-      context: ./services/dashboard-service
+      context: ../services/dashboard-service
       dockerfile: Dockerfile
     container_name: pingflow-dashboard-service
     ports:
@@ -113,12 +113,13 @@ services:
   # Discord Service
   discord-service:
     build:
-      context: ./services/discord-service
+      context: ../services/discord-service
       dockerfile: Dockerfile
     container_name: pingflow-discord-service
     environment:
       KAFKA_BROKERS: kafka:9092
       REDIS_URL: redis://redis:6379
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
       NODE_ENV: development
     depends_on:
       - kafka
@@ -130,7 +131,7 @@ services:
   # WhatsApp Service
   whatsapp-service:
     build:
-      context: ./services/whatsapp-service
+      context: ../services/whatsapp-service
       dockerfile: Dockerfile
     container_name: pingflow-whatsapp-service
     environment:
@@ -148,7 +149,7 @@ services:
   # Telegram Service
   telegram-service:
     build:
-      context: ./services/telegram-service
+      context: ../services/telegram-service
       dockerfile: Dockerfile
     container_name: pingflow-telegram-service
     environment:
@@ -166,7 +167,7 @@ services:
   # Email Service
   email-service:
     build:
-      context: ./services/email-service
+      context: ../services/email-service
       dockerfile: Dockerfile
     container_name: pingflow-email-service
     environment:

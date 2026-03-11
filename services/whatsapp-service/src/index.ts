@@ -70,7 +70,7 @@ whatsappQueue.process(async (job) => {
 
     try {
         const message = formatWhatsAppMessage(payload);
-        await sendWhatsAppMessage(user.whatsappPhoneNumber!, message);
+        await sendWhatsAppMessage(user.whatsappId!, message);
 
         await publishStatus(event.eventId, 'sent');
 

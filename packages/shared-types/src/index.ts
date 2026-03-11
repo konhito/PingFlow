@@ -14,16 +14,17 @@ export interface EventCategory {
   id: string;
   name: string;
   emoji: string;
-  color: string;
+  color: number;
   userId: string;
 }
 
 export interface User {
   id: string;
   email: string;
-  discordWebhookUrl?: string;
-  telegramChatId?: string;
-  whatsappPhoneNumber?: string;
+  discordId?: string | null;
+  telegramId?: string | null;
+  whatsappId?: string | null;
+  notificationEmail?: string | null;
 }
 
 export interface KafkaEvent {

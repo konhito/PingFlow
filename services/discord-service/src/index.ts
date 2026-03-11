@@ -1,7 +1,8 @@
 import { createKafkaClient } from '@pingflow/kafka-client';
 import { createServiceLogger } from '@pingflow/logger';
 import { KafkaTopics, NotificationPayload, DeliveryStatus } from '@pingflow/shared-types';
-import axios from 'axios';
+import { REST } from '@discordjs/rest';
+import { Routes, APIEmbed } from 'discord-api-types/v10';
 import Queue from 'bull';
 
 const logger = createServiceLogger('discord-service');
@@ -10,31 +11,35 @@ const kafka = createKafkaClient();
 // Bull queue for retry logic
 const discordQueue = new Queue('discord-notifications', process.env.REDIS_URL || 'redis://localhost:6379');
 
-interface DiscordEmbed {
-    title: string;
-    color: number;
-    fields: Array<{ name: string; value: string; inline: boolean }>;
-    timestamp: string;
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
+
+if (!DISCORD_BOT_TOKEN) {
+    logger.error('DISCORD_BOT_TOKEN environment variable is required');
+    process.exit(1);
 }
 
-async function sendDiscordWebhook(webhookUrl: string, embed: DiscordEmbed): Promise<void> {
-    try {
-        await axios.post(webhookUrl, {
-            embeds: [embed],
-        });
-        logger.info({ webhookUrl: webhookUrl.substring(0, 50) }, 'Discord webhook sent successfully');
-    } catch (error) {
-        logger.error({ error }, 'Failed to send Discord webhook');
-        throw error;
-    }
+// Initialize Discord REST client
+const rest = new REST({ version: '10' }).setToken(DISCORD_BOT_TOKEN);
+
+async function createDM(userId: string): Promise<{ id: string }> {
+    return rest.post(Routes.userChannels(), {
+        body: { recipient_id: userId }
+    }) as Promise<{ id: string }>;
 }
 
-function formatDiscordEmbed(payload: NotificationPayload): DiscordEmbed {
+async function sendEmbed(channelId: string, embed: APIEmbed): Promise<void> {
+    await rest.post(Routes.channelMessages(channelId), {
+        body: { embeds: [embed] },
+    });
+}
+
+function formatDiscordEmbed(payload: NotificationPayload): APIEmbed {
     const { event } = payload;
 
     return {
         title: `${event.category.emoji} ${event.category.name}`,
-        color: parseInt(event.category.color.replace('#', ''), 16),
+        description: event.description,
+        color: event.category.color,
         fields: Object.entries(event.fields).map(([key, value]) => ({
             name: key,
             value: String(value),
@@ -64,8 +69,12 @@ discordQueue.process(async (job) => {
     logger.info({ eventId: event.eventId }, 'Processing Discord notification');
 
     try {
+        // Create DM channel with user
+        const dmChannel = await createDM(user.discordId!);
+        
+        // Send embed to DM
         const embed = formatDiscordEmbed(payload);
-        await sendDiscordWebhook(user.discordWebhookUrl!, embed);
+        await sendEmbed(dmChannel.id, embed);
 
         await publishStatus(event.eventId, 'sent');
 

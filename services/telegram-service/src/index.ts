@@ -75,7 +75,7 @@ telegramQueue.process(async (job) => {
     try {
         const message = formatTelegramMessage(payload);
 
-        await bot.telegram.sendMessage(user.telegramChatId!, message, {
+        await bot.telegram.sendMessage(user.telegramId!, message, {
             parse_mode: 'Markdown',
         });
 

@@ -17,6 +17,12 @@ importers:
       '@neondatabase/serverless':
         specifier: ^0.9.4
         version: 0.9.5
+      '@pingflow/kafka-client':
+        specifier: workspace:*
+        version: link:packages/kafka-client
+      '@pingflow/shared-types':
+        specifier: workspace:*
+        version: link:packages/shared-types
       '@prisma/adapter-neon':
         specifier: ^5.18.0
         version: 5.22.0(@neondatabase/serverless@0.9.5)
@@ -246,6 +252,9 @@ importers:
 
   services/discord-service:
     dependencies:
+      '@discordjs/rest':
+        specifier: ^2.4.0
+        version: 2.4.0
       '@pingflow/kafka-client':
         specifier: file:../../packages/kafka-client
         version: link:../../packages/kafka-client
@@ -255,12 +264,12 @@ importers:
       '@pingflow/shared-types':
         specifier: file:../../packages/shared-types
         version: link:../../packages/shared-types
-      axios:
-        specifier: ^1.6.0
-        version: 1.13.5
       bull:
         specifier: ^4.12.0
         version: 4.16.5
+      discord-api-types:
+        specifier: ^0.37.114
+        version: 0.37.114
       dotenv:
         specifier: ^16.3.1
         version: 16.6.1

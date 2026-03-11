@@ -19,14 +19,20 @@ async function processIncomingEvents() {
             logger.info({ eventId: event.eventId }, 'Processing incoming event');
 
             try {
+                // Build formatted message
+                const title = `${event.category.emoji || "🔔"} ${event.category.name.charAt(0).toUpperCase() + event.category.name.slice(1)}`;
+                const description = event.description || `A new ${event.category.name} event has occurred!`;
+                const formattedMessage = `${title}\n\n${description}`;
+
                 // Store event in database
                 await prisma.event.create({
                     data: {
                         id: event.eventId,
                         userId: event.userId,
-                        categoryId: event.category.id,
+                        eventCategoryId: event.category.id,
+                        name: event.category.name,
+                        formattedMessage,
                         fields: event.fields,
-                        description: event.description,
                         createdAt: new Date(event.timestamp),
                     },
                 });
@@ -48,21 +54,27 @@ async function processIncomingEvents() {
                 // Route to appropriate notification services
                 const promises: Promise<void>[] = [];
 
-                if (user.discordWebhookUrl) {
+                if (user.discordId) {
                     promises.push(
                         kafka.publishEvent(KafkaTopics.NOTIFICATIONS_DISCORD, payload)
                     );
                 }
 
-                if (user.whatsappPhoneNumber) {
+                if (user.whatsappId) {
                     promises.push(
                         kafka.publishEvent(KafkaTopics.NOTIFICATIONS_WHATSAPP, payload)
                     );
                 }
 
-                if (user.telegramChatId) {
+                if (user.telegramId) {
                     promises.push(
                         kafka.publishEvent(KafkaTopics.NOTIFICATIONS_TELEGRAM, payload)
+                    );
+                }
+
+                if (user.notificationEmail) {
+                    promises.push(
+                        kafka.publishEvent(KafkaTopics.NOTIFICATIONS_EMAIL, payload)
                     );
                 }
 

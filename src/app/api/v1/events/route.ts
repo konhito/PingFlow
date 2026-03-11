@@ -1,15 +1,27 @@
 import { FREE_QUOTA, PRO_QUOTA } from "@/config";
 import { db } from "@/db";
-import { DiscordClient } from "@/lib/discord-client";
 import { CATEGORY_NAME_VALIDATOR } from "@/lib/validators/category-validator";
+import { createKafkaClient } from "@pingflow/kafka-client";
+import { KafkaTopics, KafkaEvent } from "@pingflow/shared-types";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { randomUUID } from "crypto";
 
 const REQUEST_VALIDATOR = z.object({
   category: CATEGORY_NAME_VALIDATOR,
   fields: z.record(z.string().or(z.number()).or(z.boolean())).optional(),
   description: z.string().optional(),
 }).strict()
+
+// Lazy-initialize Kafka client
+let kafkaClient: ReturnType<typeof createKafkaClient> | null = null;
+
+function getKafkaClient() {
+  if (!kafkaClient) {
+    kafkaClient = createKafkaClient(process.env.KAFKA_BROKERS);
+  }
+  return kafkaClient;
+}
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -40,17 +52,19 @@ export const POST = async (req: NextRequest) => {
     })
 
     if (!user) {
-      return NextResponse.json({ message: "Invalid API key" })
+      return NextResponse.json({ message: "Invalid API key" }, { status: 401 })
     }
 
-    if (!user?.discordId) {
+    // Check if user has at least one notification channel configured
+    const hasNotificationChannel = user.discordId || user.telegramId || user.whatsappId
+    if (!hasNotificationChannel) {
       return NextResponse.json(
-        { message: "Please enter your discord ID in your account settings" },
+        { message: "Please configure at least one notification channel (Discord, Telegram, or WhatsApp) in your account settings" },
         { status: 403 }
       )
     }
 
-    //Actual logic
+    // Quota check
     const currentDate = new Date()
     const currentMonth = currentDate.getMonth() + 1
     const currentYear = currentDate.getFullYear()
@@ -77,19 +91,13 @@ export const POST = async (req: NextRequest) => {
       )
     }
 
-    const discord = new DiscordClient(process.env.DISCORD_BOT_TOKEN)
-
-    const dmChannel = await discord.createDM(user.discordId)
-
+    // Parse request body
     let requestData: unknown
-
     try {
       requestData = await req.json()
     } catch (error) {
       return NextResponse.json(
-        {
-          message: "Invalid JSON request body",
-        },
+        { message: "Invalid JSON request body" },
         { status: 400 }
       )
     }
@@ -97,7 +105,7 @@ export const POST = async (req: NextRequest) => {
     const validationResult = REQUEST_VALIDATOR.parse(requestData)
 
     const category = user.EventCategories.find(
-      (cat:any) => cat.name === validationResult.category
+      (cat: any) => cat.name === validationResult.category
     )
 
     if (!category) {
@@ -109,73 +117,42 @@ export const POST = async (req: NextRequest) => {
       )
     }
 
-    const eventData = {
-      title: `${category.emoji || "🔔"} ${category.name.charAt(0).toUpperCase() + category.name.slice(1)
-        }`,
-      description:
-        validationResult.description ||
-        `A new ${category.name} event has occured!`,
-      color: category.color,
-      timeStamp: new Date().toISOString(),
-      fields: Object.entries(validationResult.fields || {}).map(
-        ([key, value]) => {
-          return {
-            name: key,
-            value: String(value),
-            inline: true,
-          }
-        }
-      ),
-    }
-
-    const event = await db.event.create({
-      data: {
-        name: category.name,
-        formattedMessage: `${eventData.title}\n\n${eventData.description}`,
+    // Increment quota optimistically
+    await db.quota.upsert({
+      where: { userId: user.id, month: currentMonth, year: currentYear },
+      update: { count: { increment: 1 } },
+      create: {
         userId: user.id,
-        fields: validationResult.fields || {},
-        eventCategoryId: category.id,
+        month: currentMonth,
+        year: currentYear,
+        count: 1,
       },
     })
 
-    try {
-      await discord.sendEmbed(dmChannel.id, eventData)
-
-      await db.event.update({
-        where: { id: event.id },
-        data: { deliveryStatus: "DELIVERED" },
-      })
-
-      await db.quota.upsert({
-        where: { userId: user.id, month: currentMonth, year: currentYear },
-        update: { count: { increment: 1 } },
-        create: {
-          userId: user.id,
-          month: currentMonth,
-          year: currentYear,
-          count: 1,
-        },
-      })
-    } catch (error) {
-      await db.event.update({
-        where: { id: event.id },
-        data: { deliveryStatus: "FAILED" }
-      })
-
-      console.log(error)
-
-      return NextResponse.json(
-        {
-          message: "Error processing event",
-          eventId: event.id,
-        },
-        { status: 500 }
-      )
+    // Build Kafka event payload
+    const eventId = randomUUID()
+    const kafkaEvent: KafkaEvent = {
+      eventId,
+      userId: user.id,
+      category: {
+        id: category.id,
+        name: category.name,
+        emoji: category.emoji || "🔔",
+        color: category.color,
+        userId: user.id,
+      },
+      fields: validationResult.fields || {},
+      description: validationResult.description,
+      timestamp: new Date().toISOString(),
     }
 
+    // Publish to Kafka for async processing
+    const kafka = getKafkaClient()
+    await kafka.publishEvent(KafkaTopics.EVENTS_INCOMING, kafkaEvent)
+
     return NextResponse.json({
-      message: "Event processed successfully",
-      eventId: event.id
+      message: "Event queued for processing",
+      eventId,
     })
   } catch (error) {
     console.error(error)
