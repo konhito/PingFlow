@@ -33,31 +33,39 @@ export async function GET(request: NextRequest) {
             avatar: githubUser.avatar_url,
         })
 
-        const user = await db.user.upsert({
-            where: {
-                provider_providerId: {
+        // Check if user already exists by email
+        let user = await db.user.findUnique({
+            where: { email: githubUser.email },
+        })
+
+        if (user) {
+            // User exists, update them
+            user = await db.user.update({
+                where: { id: user.id },
+                data: {
+                    name: (githubUser.name || githubUser.login) || user.name,
+                    avatar: githubUser.avatar_url || user.avatar,
+                    provider: 'GITHUB', // Update provider
+                    providerId: githubUser.id.toString(),
+                    refreshToken,
+                    updatedAt: new Date(),
+                },
+            })
+        } else {
+            // User doesn't exist, create them
+            user = await db.user.create({
+                data: {
+                    email: githubUser.email,
+                    name: githubUser.name || githubUser.login,
+                    avatar: githubUser.avatar_url,
                     provider: 'GITHUB',
                     providerId: githubUser.id.toString(),
+                    refreshToken,
+                    quotaLimit: 100, // Default quota for free tier
+                    plan: 'FREE',
                 },
-            },
-            update: {
-                email: githubUser.email,
-                name: githubUser.name || githubUser.login,
-                avatar: githubUser.avatar_url,
-                refreshToken,
-                updatedAt: new Date(),
-            },
-            create: {
-                email: githubUser.email,
-                name: githubUser.name || githubUser.login,
-                avatar: githubUser.avatar_url,
-                provider: 'GITHUB',
-                providerId: githubUser.id.toString(),
-                refreshToken,
-                quotaLimit: 100, // Default quota for free tier
-                plan: 'FREE',
-            },
-        })
+            })
+        }
 
         // Generate new tokens with actual user ID
         const finalTokens = await generateTokens({

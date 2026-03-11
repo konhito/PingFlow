@@ -259,7 +259,3 @@ Contributions are welcome! Please follow the [Contributing Guidelines](CONTRIBUT
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-<div align="center">
-  <strong>Made with ❤️ by konhito</strong>
-</div>

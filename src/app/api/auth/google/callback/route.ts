@@ -33,31 +33,39 @@ export async function GET(request: NextRequest) {
             avatar: googleUser.picture,
         })
 
-        const user = await db.user.upsert({
-            where: {
-                provider_providerId: {
+        // Check if user already exists by email
+        let user = await db.user.findUnique({
+            where: { email: googleUser.email },
+        })
+
+        if (user) {
+            // User exists, update them
+            user = await db.user.update({
+                where: { id: user.id },
+                data: {
+                    name: googleUser.name || user.name,
+                    avatar: googleUser.picture || user.avatar,
+                    provider: 'GOOGLE', // Update provider if they are logging in with Google now
+                    providerId: googleUser.id,
+                    refreshToken,
+                    updatedAt: new Date(),
+                },
+            })
+        } else {
+            // User doesn't exist, create them
+            user = await db.user.create({
+                data: {
+                    email: googleUser.email,
+                    name: googleUser.name,
+                    avatar: googleUser.picture,
                     provider: 'GOOGLE',
                     providerId: googleUser.id,
+                    refreshToken,
+                    quotaLimit: 100, // Default quota for free tier
+                    plan: 'FREE',
                 },
-            },
-            update: {
-                email: googleUser.email,
-                name: googleUser.name,
-                avatar: googleUser.picture,
-                refreshToken,
-                updatedAt: new Date(),
-            },
-            create: {
-                email: googleUser.email,
-                name: googleUser.name,
-                avatar: googleUser.picture,
-                provider: 'GOOGLE',
-                providerId: googleUser.id,
-                refreshToken,
-                quotaLimit: 100, // Default quota for free tier
-                plan: 'FREE',
-            },
-        })
+            })
+        }
 
         // Generate new tokens with actual user ID
         const finalTokens = await generateTokens({
@@ -94,7 +102,11 @@ export async function GET(request: NextRequest) {
         // Redirect to dashboard
         return NextResponse.redirect(new URL('/dashboard', request.url))
     } catch (error) {
-        console.error('Google OAuth callback error:', error)
+        console.error('Google OAuth callback error (detailed):', error)
+        if (error instanceof Error) {
+            console.error('Error message:', error.message)
+            console.error('Error stack:', error.stack)
+        }
         return NextResponse.redirect(
             new URL('/sign-in?error=oauth_failed', request.url)
         )
