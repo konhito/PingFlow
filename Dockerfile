@@ -4,6 +4,7 @@ WORKDIR /app
 RUN apk add --no-cache libc6-compat dumb-init
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/ ./packages/
+COPY prisma/ ./prisma/
 RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
 # ── Stage 2: Builder ─────────────────────────────────────────────────────────
