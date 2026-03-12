@@ -6,7 +6,6 @@ node_modules
 docker
 argocd
 k8s
-services
 .env
 .env.*
 !.env.example
