@@ -1,9 +1,12 @@
+# ── Discord Service ────────────────────────────────────────────────────────────
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: discord-service
+  namespace: pingflow
   labels:
     app: discord-service
+    tier: notification
 spec:
   replicas: 2
   selector:
@@ -13,15 +16,20 @@ spec:
     metadata:
       labels:
         app: discord-service
+        tier: notification
     spec:
       containers:
       - name: discord-service
         image: pingflow/discord-service:latest
+        envFrom:
+        - configMapRef:
+            name: pingflow-config
         env:
-        - name: KAFKA_BROKER
-          value: "kafka:9092"
-        - name: REDIS_URL
-          value: "redis://redis:6379"
+        - name: DISCORD_BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: pingflow-secrets
+              key: discord-bot-token
         resources:
           requests:
             memory: "128Mi"
@@ -29,13 +37,41 @@ spec:
           limits:
             memory: "256Mi"
             cpu: "200m"
+        livenessProbe:
+          exec:
+            command: ["node", "-e", "require('http').get('http://localhost:3003/health', r => process.exit(r.statusCode===200?0:1))"]
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: ["node", "-e", "require('http').get('http://localhost:3003/health', r => process.exit(r.statusCode===200?0:1))"]
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: discord-service
+  namespace: pingflow
+spec:
+  selector:
+    app: discord-service
+  ports:
+  - port: 3003
+    targetPort: 3003
+  type: ClusterIP
+---
+# ── WhatsApp Service ───────────────────────────────────────────────────────────
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: whatsapp-service
+  namespace: pingflow
   labels:
     app: whatsapp-service
+    tier: notification
 spec:
   replicas: 1
   selector:
@@ -45,18 +81,25 @@ spec:
     metadata:
       labels:
         app: whatsapp-service
+        tier: notification
     spec:
       containers:
       - name: whatsapp-service
         image: pingflow/whatsapp-service:latest
+        envFrom:
+        - configMapRef:
+            name: pingflow-config
         env:
-        - name: KAFKA_BROKER
-          value: "kafka:9092"
         - name: WHATSAPP_API_URL
           valueFrom:
             secretKeyRef:
               name: pingflow-secrets
               key: whatsapp-api-url
+        - name: WHATSAPP_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: pingflow-secrets
+              key: whatsapp-api-key
         resources:
           requests:
             memory: "128Mi"
@@ -64,13 +107,41 @@ spec:
           limits:
             memory: "256Mi"
             cpu: "200m"
+        livenessProbe:
+          exec:
+            command: ["node", "-e", "require('http').get('http://localhost:3004/health', r => process.exit(r.statusCode===200?0:1))"]
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: ["node", "-e", "require('http').get('http://localhost:3004/health', r => process.exit(r.statusCode===200?0:1))"]
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whatsapp-service
+  namespace: pingflow
+spec:
+  selector:
+    app: whatsapp-service
+  ports:
+  - port: 3004
+    targetPort: 3004
+  type: ClusterIP
+---
+# ── Telegram Service ──────────────────────────────────────────────────────────
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: telegram-service
+  namespace: pingflow
   labels:
     app: telegram-service
+    tier: notification
 spec:
   replicas: 2
   selector:
@@ -80,13 +151,15 @@ spec:
     metadata:
       labels:
         app: telegram-service
+        tier: notification
     spec:
       containers:
       - name: telegram-service
         image: pingflow/telegram-service:latest
+        envFrom:
+        - configMapRef:
+            name: pingflow-config
         env:
-        - name: KAFKA_BROKER
-          value: "kafka:9092"
         - name: TELEGRAM_BOT_TOKEN
           valueFrom:
             secretKeyRef:
@@ -99,13 +172,41 @@ spec:
           limits:
             memory: "256Mi"
             cpu: "200m"
+        livenessProbe:
+          exec:
+            command: ["node", "-e", "require('http').get('http://localhost:3005/health', r => process.exit(r.statusCode===200?0:1))"]
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: ["node", "-e", "require('http').get('http://localhost:3005/health', r => process.exit(r.statusCode===200?0:1))"]
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: telegram-service
+  namespace: pingflow
+spec:
+  selector:
+    app: telegram-service
+  ports:
+  - port: 3005
+    targetPort: 3005
+  type: ClusterIP
+---
+# ── Email Service ─────────────────────────────────────────────────────────────
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: email-service
+  namespace: pingflow
   labels:
     app: email-service
+    tier: notification
 spec:
   replicas: 2
   selector:
@@ -115,17 +216,15 @@ spec:
     metadata:
       labels:
         app: email-service
+        tier: notification
     spec:
       containers:
       - name: email-service
         image: pingflow/email-service:latest
+        envFrom:
+        - configMapRef:
+            name: pingflow-config
         env:
-        - name: KAFKA_BROKER
-          value: "kafka:9092"
-        - name: SMTP_HOST
-          value: "smtp.gmail.com"
-        - name: SMTP_PORT
-          value: "587"
         - name: SMTP_USER
           valueFrom:
             secretKeyRef:
@@ -136,8 +235,6 @@ spec:
             secretKeyRef:
               name: pingflow-secrets
               key: smtp-pass
-        - name: FROM_EMAIL
-          value: "noreply@pingflow.com"
         resources:
           requests:
             memory: "128Mi"
@@ -145,3 +242,28 @@ spec:
           limits:
             memory: "256Mi"
             cpu: "200m"
+        livenessProbe:
+          exec:
+            command: ["node", "-e", "require('http').get('http://localhost:3006/health', r => process.exit(r.statusCode===200?0:1))"]
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: ["node", "-e", "require('http').get('http://localhost:3006/health', r => process.exit(r.statusCode===200?0:1))"]
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: email-service
+  namespace: pingflow
+spec:
+  selector:
+    app: email-service
+  ports:
+  - port: 3006
+    targetPort: 3006
+  type: ClusterIP

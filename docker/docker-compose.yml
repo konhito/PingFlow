@@ -184,6 +184,29 @@ services:
       - pingflow-network
     restart: unless-stopped
 
+  # API Gateway
+  api-gateway:
+    build:
+      context: ../services/api-gateway
+      dockerfile: Dockerfile
+    container_name: pingflow-api-gateway
+    ports:
+      - "4000:4000"
+    environment:
+      KAFKA_BROKERS: kafka:9092
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://postgres:postgres@postgresql:5432/pingflow
+      PORT: 4000
+      APP_URL: https://pingflow.konhito.me
+      NODE_ENV: development
+    depends_on:
+      - kafka
+      - redis
+      - postgresql
+    networks:
+      - pingflow-network
+    restart: unless-stopped
+
 networks:
   pingflow-network:
     driver: bridge

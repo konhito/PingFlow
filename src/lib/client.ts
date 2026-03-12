@@ -5,16 +5,23 @@ import { StatusCode } from "hono/utils/http-status"
 import superjson from "superjson"
 
 const getBaseUrl = () => {
-  // browser should use relative path
+  // Browser always uses relative path (no CORS issues)
   if (typeof window !== "undefined") {
     return ""
   }
 
+  // Server-side: prefer explicit env var, then derive from Vercel, then use actual domain
+  if (process.env.NEXT_PUBLIC_APP_URL) {
+    return process.env.NEXT_PUBLIC_APP_URL
+  }
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+
   return process.env.NODE_ENV === "development"
     ? "http://localhost:3000/"
-    : process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "https://<YOUR_DEPLOYED_WORKER_URL>/"
+    : "https://pingflow.konhito.me/"
 }
 
 export const baseClient = hc<AppType>(getBaseUrl(), {

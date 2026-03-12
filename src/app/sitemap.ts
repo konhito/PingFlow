@@ -1,7 +1,8 @@
-import { MetadataRoute } from "next"
+import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_WEBSITE_URL || "https://pingflow.com"
+  const baseUrl =
+    process.env.NEXT_PUBLIC_WEBSITE_URL || "https://pingflow.konhito.me";
 
   return [
     {
@@ -28,6 +29,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.5,
     },
-  ]
+  ];
 }
-

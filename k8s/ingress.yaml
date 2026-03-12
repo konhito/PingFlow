@@ -1,0 +1,63 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pingflow-ingress
+  namespace: pingflow
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    # TLS / Let's Encrypt (cert-manager)
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # WebSocket support for dashboard
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/upgrade: "$http_upgrade"
+    nginx.ingress.kubernetes.io/connection-upgrade: "Upgrade"
+    # CORS
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://pingflow.konhito.me"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization, Content-Type, X-Pingflow-API-Key"
+spec:
+  tls:
+  - hosts:
+    - pingflow.konhito.me
+    secretName: pingflow-tls
+  rules:
+  # ── Main domain → Next.js frontend ──────────────────────────
+  - host: pingflow.konhito.me
+    http:
+      paths:
+      # WebSocket endpoint for real-time dashboard
+      - path: /ws
+        pathType: Prefix
+        backend:
+          service:
+            name: dashboard-service
+            port:
+              number: 3002
+      # Public API ingestion endpoint → event-producer
+      - path: /api/v1
+        pathType: Prefix
+        backend:
+          service:
+            name: event-producer
+            port:
+              number: 3001
+      # API gateway (new service)
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: api-gateway
+            port:
+              number: 4000
+      # Everything else → Next.js frontend
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pingflow-frontend
+            port:
+              number: 3000
+

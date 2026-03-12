@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.gitignore
+*.md
+docker
+argocd
+k8s
+services
+.env
+.env.*
+!.env.example
+*.log
+coverage
+.nyc_output

@@ -1,0 +1,40 @@
+# ── ArgoCD Project for PingFlow ────────────────────────────────────────────────
+# Apply this once manually: kubectl apply -f argocd/project.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: pingflow
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  description: PingFlow notification platform
+  sourceRepos:
+  - https://github.com/konhito/PingFlow.git
+  destinations:
+  - namespace: pingflow
+    server: https://kubernetes.default.svc
+  - namespace: argocd
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: ''
+    kind: Namespace
+  - group: networking.k8s.io
+    kind: NetworkPolicy
+  namespaceResourceWhitelist:
+  - group: apps
+    kind: Deployment
+  - group: apps
+    kind: StatefulSet
+  - group: ''
+    kind: Service
+  - group: ''
+    kind: ConfigMap
+  - group: ''
+    kind: Secret
+  - group: networking.k8s.io
+    kind: Ingress
+  - group: autoscaling
+    kind: HorizontalPodAutoscaler
+  - group: networking.k8s.io
+    kind: NetworkPolicy

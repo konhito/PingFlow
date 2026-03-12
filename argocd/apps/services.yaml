@@ -1,29 +1,27 @@
-# ── App-of-Apps Root Application ─────────────────────────────────────────────
-# This application points to argocd/apps/ which contains child applications.
-# ArgoCD will discover and manage each child app automatically.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: pingflow-root
+  name: pingflow-services
   namespace: argocd
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
   labels:
     app.kubernetes.io/part-of: pingflow
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: pingflow
   source:
     repoURL: https://github.com/konhito/PingFlow.git
     targetRevision: main
-    path: argocd/apps
+    path: k8s
+    directory:
+      include: "{frontend.yaml,event-producer.yaml,dashboard-service.yaml,notification-services.yaml,api-gateway.yaml}"
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: pingflow
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-      allowEmpty: false
     syncOptions:
     - CreateNamespace=true
     retry:

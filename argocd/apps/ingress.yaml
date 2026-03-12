@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pingflow-ingress
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: pingflow
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: pingflow
+  source:
+    repoURL: https://github.com/konhito/PingFlow.git
+    targetRevision: main
+    path: k8s
+    directory:
+      include: "{ingress.yaml,hpa.yaml,network-policies.yaml}"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pingflow
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 2m
