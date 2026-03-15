@@ -1,23 +1,24 @@
 {
-    "name": "event-producer",
-    "version": "1.0.0",
-    "private": true,
-    "scripts": {
-        "dev": "tsx watch src/index.ts",
-        "build": "tsc",
-        "start": "node dist/index.js"
-    },
-    "dependencies": {
-        "@pingflow/kafka-client": "file:../../packages/kafka-client",
-        "@pingflow/logger": "file:../../packages/logger",
-        "@pingflow/shared-types": "file:../../packages/shared-types",
-        "@prisma/client": "^5.18.0",
-        "dotenv": "^16.3.1"
-    },
-    "devDependencies": {
-        "@types/node": "^20.0.0",
-        "prisma": "^5.18.0",
-        "tsx": "^4.7.0",
-        "typescript": "^5.0.0"
-    }
+  "name": "event-producer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@pingflow/kafka-client": "file:../../packages/kafka-client",
+    "@pingflow/logger": "file:../../packages/logger",
+    "@pingflow/shared-types": "file:../../packages/shared-types",
+    "@prisma/client": "^5.18.0",
+    "dotenv": "^16.3.1",
+    "@pingflow/dead-letter": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "prisma": "^5.18.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.0.0"
+  }
 }
