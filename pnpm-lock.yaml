@@ -181,6 +181,12 @@ importers:
         specifier: ^5
         version: 5.7.2
 
+  packages/dead-letter-queue:
+    dependencies:
+      bull:
+        specifier: ^4.12.0
+        version: 4.16.5
+
   packages/kafka-client:
     dependencies:
       '@pingflow/logger':
@@ -372,6 +378,9 @@ importers:
 
   services/event-producer:
     dependencies:
+      '@pingflow/dead-letter':
+        specifier: workspace:*
+        version: link:../../packages/dead-letter-queue
       '@pingflow/kafka-client':
         specifier: file:../../packages/kafka-client
         version: link:../../packages/kafka-client
@@ -4926,7 +4935,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 7.2.0
       '@typescript-eslint/visitor-keys': 7.2.0
-      debug: 4.4.0
+      debug: 4.4.3
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.3
@@ -5198,7 +5207,7 @@ snapshots:
 
   capnp-ts@0.7.0:
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.3
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
@@ -6132,7 +6141,7 @@ snapshots:
     dependencies:
       '@ioredis/commands': 1.5.0
       cluster-key-slot: 1.1.2
-      debug: 4.4.0
+      debug: 4.4.3
       denque: 2.1.0
       lodash.defaults: 4.2.0
       lodash.isarguments: 3.1.0
