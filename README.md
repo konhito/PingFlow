@@ -27,6 +27,10 @@ Now re-engineered with a **Microservices Architecture** for high scalability and
 
 ---
 
+## 📝 Engineering Blog
+
+- [How I cut my API response time in half by moving quota tracking to Redis](https://medium.com/@konhito02/how-i-cut-my-api-response-time-in-half-by-moving-quota-tracking-to-redis-b9d181faee1f)
+
 ## Features
 
 ### Core Features
